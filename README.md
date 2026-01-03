@@ -1,10 +1,10 @@
 # 🌳 Malbat.org - Family Tree
 
-A Django web application to manage and visualize a family tree with Gramps import support.
+A modern, collaborative Django web application for genealogy and family tree management with seamless Gramps integration.
 
 ## 📋 Description
 
-Malbat.org is a complete web platform for managing a family genealogy with the following features:
+Malbat.org is a powerful, user-friendly web platform for exploring and managing your family's genealogy. Built with Django, it transforms your Gramps genealogical data into an interactive web experience that's easy to share with family members. With built-in proposal and validation workflows, community members can contribute improvements while maintaining data integrity.
 
 ### ✨ Key Features
 - **Gramps Import**: Easily import your genealogical data from Gramps
