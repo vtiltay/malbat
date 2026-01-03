@@ -15,6 +15,34 @@ Malbat.org is a powerful, user-friendly web platform for exploring and managing 
 - **Email Notifications**: Alerts for proposals and validations
 - **Media Management**: Associate photos with people
 
+## 🛠️ Technologies & Libraries
+
+### Backend
+- **Django 4.2.26**: High-level Python web framework with batteries included
+- **django-filter 23.5**: Reusable app for filtering querysets and model instances
+
+### Frontend & Templating
+- **HTML5**: Modern web markup
+- **CSS3**: Responsive styling with Django admin theme
+- **JavaScript**: Interactive features and client-side logic
+
+### Database
+- **SQLite**: Default lightweight database (can be switched to PostgreSQL)
+- **Django ORM**: Object-relational mapping for database queries
+
+### Environment & Deployment
+- **Python 3.8+**: Programming language
+- **Gunicorn**: WSGI HTTP server for production deployment
+- **Nginx**: Web server and reverse proxy (recommended for production)
+
+### Development Tools
+- **pip**: Python package manager
+- **Virtual environment**: Project dependency isolation
+- **Django Management Commands**: Custom commands for data import and management
+
+### Data Integration
+- **Gramps**: Genealogical data source format support
+
 ## 🚀 Installation
 
 ### ⚡ Quick Install (One Command - Standalone Script)

@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
-    {name = "Victor Tiltay", email = "victor@malbat.org"}
+    {name = "Victor Tiltay", email = "vtiltay@gmail.com"}
 ]
 keywords = [
     "genealogy",
