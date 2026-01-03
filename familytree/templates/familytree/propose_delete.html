@@ -1,6 +1,7 @@
 {% extends "familytree/base.html" %}
+{% load i18n %}
 
-{% block title %}Proposer une suppression{% endblock %}
+{% block title %}{% trans "Propose Deletion" %}{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -8,10 +9,10 @@
         <div class="col-lg-6">
             <div class="alert alert-danger border-start border-danger border-3 mb-4" role="alert">
                 <h4 class="alert-heading">
-                    <i class="bi bi-exclamation-triangle"></i> Proposer une suppression
+                    <i class="bi bi-exclamation-triangle"></i> {% trans "Propose Deletion" %}
                 </h4>
-                <p class="mb-0">Vous allez proposer la suppression de <strong>{{ person.first_name }} {{ person.last_name }}</strong></p>
-                <p class="mb-0 mt-2 small">Cette action est irréversible. L'administrateur devra examiner votre demande et la valider.</p>
+                <p class="mb-0">{% blocktrans %}You are about to propose the deletion of <strong>{{ first_name }} {{ last_name }}</strong>{% endblocktrans %}</p>
+                <p class="mb-0 mt-2 small">{% trans "This action is irreversible. The administrator will review your request and validate it." %}</p>
             </div>
 
             <div class="card border-0 shadow-lg">
@@ -20,11 +21,11 @@
                         {% csrf_token %}
                         
                         <div class="mb-4 p-3 bg-light rounded">
-                            <div class="small text-muted text-uppercase fw-bold mb-2">Personne à supprimer</div>
+                            <div class="small text-muted text-uppercase fw-bold mb-2">{% trans "Person to Delete" %}</div>
                             <div class="fw-bold">{{ person.first_name }} {{ person.last_name }}</div>
                             {% if person.birth_date %}
                                 <div class="small text-muted mt-1">
-                                    <i class="bi bi-calendar"></i> Né(e) le {{ person.birth_date|date:"d/m/Y" }}
+                                    <i class="bi bi-calendar"></i> {% blocktrans %}Born {{ birth_date }}{% endblocktrans %}
                                 </div>
                             {% endif %}
                         </div>
@@ -39,7 +40,7 @@
                                     required
                                 >
                                 <label class="form-check-label" for="{{ form.confirmation.id_for_label }}">
-                                    Je confirme la suppression de {{ person.first_name }} {{ person.last_name }}
+                                    {% blocktrans %}I confirm the deletion of {{ first_name }} {{ last_name }}{% endblocktrans %}
                                 </label>
                             </div>
                             {% if form.confirmation.errors %}
@@ -53,10 +54,10 @@
                         
                         <div class="d-grid gap-2 d-sm-flex">
                             <button type="submit" class="btn btn-danger">
-                                <i class="bi bi-trash"></i> Confirmer la suppression
+                                <i class="bi bi-trash"></i> {% trans "Confirm Deletion" %}
                             </button>
                             <a href="{% url 'person_detail' gramps_id_numeric=person.gramps_id_numeric %}" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle"></i> Annuler
+                                <i class="bi bi-x-circle"></i> {% trans "Cancel" %}
                             </a>
                         </div>
                     </form>

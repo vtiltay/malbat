@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang=\"en\">
 <head>
     <meta charset="UTF-8">
     <style>
@@ -65,23 +65,23 @@
         </div>
 
         <div class="content">
-            <p>Bonjour,</p>
+            <p>Hello,</p>
 
-            <p>Une nouvelle proposition a été soumise par <strong>{{ user.username }}</strong> ({{ user.get_full_name }}).</p>
+            <p>A new proposal has been submitted by <strong>{{ user.username }}</strong> ({{ user.get_full_name }}).</p>
 
-            <div class="proposal-details">
-                <p><span class="label">ID de la proposition:</span> #{{ proposal.id }}</p>
-                <p><span class="label">Action:</span> {{ action }}</p>
-                <p><span class="label">Type de relation:</span> {{ entity_type }}</p>
+            <div class=\"proposal-details\">
+                <p><span class=\"label\">Proposal ID:</span> #{{ proposal.id }}</p>
+                <p><span class=\"label\">Action:</span> {{ action }}</p>
+                <p><span class=\"label\">Relationship Type:</span> {{ entity_type }}</p>
                 {% if person %}
-                <p><span class="label">Personne concernée:</span> {{ person.first_name }} {{ person.last_name }} ({{ person.gramps_id }})</p>
+                <p><span class=\"label\">Person Concerned:</span> {{ person.first_name }} {{ person.last_name }} ({{ person.gramps_id }})</p>
                 {% endif %}
-                <p><span class="label">Statut:</span> {{ proposal.get_status_display }}</p>
-                <p><span class="label">Date:</span> {{ proposal.created_at|date:"d/m/Y à H:i" }}</p>
+                <p><span class=\"label\">Status:</span> {{ proposal.get_status_display }}</p>
+                <p><span class=\"label\">Date:</span> {{ proposal.created_at|date:\"d/m/Y H:i\" }}</p>
             </div>
 
             {% if proposal.data %}
-            <h4>📋 Données proposées:</h4>
+            <h4>📋 Proposed Data:</h4>
             <div class="proposal-details">
                 {% for key, value in proposal.data.items %}
                     <p><span class="label">{{ key }}:</span> <span class="value">{{ value }}</span></p>
@@ -91,13 +91,13 @@
 
             <p>
                 <a href="https://malbat.org/admin/familytree/proposedmodification/{{ proposal.id }}/change/" class="cta-button">
-                    Consulter la proposition
+                    View Proposal
                 </a>
             </p>
         </div>
 
-        <div class="footer">
-            <p>Cet email a été généré automatiquement. Veuillez ne pas y répondre directement.</p>
+        <div class=\"footer\">
+            <p>This email was generated automatically. Please do not reply directly.</p>
             <p>&copy; 2026 Malbat.org - Family Tree</p>
         </div>
     </div>

@@ -1,6 +1,7 @@
 {% extends "familytree/base.html" %}
+{% load i18n %}
 
-{% block title %}Proposer une modification{% endblock %}
+{% block title %}{% trans "Propose Modification" %}{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -9,10 +10,10 @@
             <div class="card border-0 shadow-lg mb-4">
                 <div class="card-body p-5">
                     <h1 class="h3 mb-2">
-                        <i class="bi bi-pencil-square"></i> Proposer une modification
+                        <i class="bi bi-pencil-square"></i> {% trans "Propose Modification" %}
                     </h1>
                     <p class="text-muted mb-4">
-                        Pour les modifications complexes, utilisez ce formulaire avancé en format JSON.
+                        {% trans "For complex modifications, use this advanced form with JSON format." %}
                     </p>
                     
                     <form method="post" novalidate>
@@ -23,7 +24,7 @@
                                 <i class="bi bi-tag"></i> {{ form.action.label }}
                             </label>
                             <select name="action" id="{{ form.action.id_for_label }}" class="form-select {% if form.action.errors %}is-invalid{% endif %}" required>
-                                <option value="">Sélectionner une action</option>
+                                <option value="">{% trans "Select an action" %}</option>
                                 {% for value, label in form.action.field.choices %}
                                     {% if value %}
                                         <option value="{{ value }}" {% if form.action.value == value %}selected{% endif %}>{{ label }}</option>
@@ -44,7 +45,7 @@
                                 <i class="bi bi-box"></i> {{ form.entity_type.label }}
                             </label>
                             <select name="entity_type" id="{{ form.entity_type.id_for_label }}" class="form-select {% if form.entity_type.errors %}is-invalid{% endif %}" required>
-                                <option value="">Sélectionner un type</option>
+                                <option value="">{% trans "Select a type" %}</option>
                                 {% for value, label in form.entity_type.field.choices %}
                                     {% if value %}
                                         <option value="{{ value }}" {% if form.entity_type.value == value %}selected{% endif %}>{{ label }}</option>
@@ -65,7 +66,7 @@
                                 <i class="bi bi-person"></i> {{ form.person.label }}
                             </label>
                             <select name="person" id="{{ form.person.id_for_label }}" class="form-select {% if form.person.errors %}is-invalid{% endif %}">
-                                <option value="">Sélectionner une personne (optionnel)</option>
+                                <option value="">{% trans "Select a person (optional)" %}</option>
                                 {% for value, label in form.person.field.choices %}
                                     {% if value %}
                                         <option value="{{ value }}" {% if form.person.value == value %}selected{% endif %}>{{ label }}</option>
@@ -90,9 +91,9 @@
                                 name="entity_id" 
                                 id="{{ form.entity_id.id_for_label }}" 
                                 class="form-control {% if form.entity_id.errors %}is-invalid{% endif %}"
-                                placeholder="Exemple: I0001"
+                                placeholder="{% trans 'Example: I0001' %}"
                             >
-                            <small class="text-muted">ID de l'entité (ex: I0001)</small>
+                            <small class="text-muted">{% trans "Entity ID (e.g. I0001)" %}</small>
                             {% if form.entity_id.errors %}
                                 <div class="invalid-feedback d-block">
                                     {% for error in form.entity_id.errors %}
@@ -111,11 +112,11 @@
                                 id="{{ form.data.id_for_label }}" 
                                 class="form-control {% if form.data.errors %}is-invalid{% endif %}"
                                 rows="6"
-                                placeholder='{"first_name": "Jean", "birth_date": "1990-01-15"}'
+                                placeholder='{"first_name": "John", "birth_date": "1990-01-15"}'
                             ></textarea>
                             <small class="text-muted">
-                                Format JSON avec les champs à ajouter/modifier.<br>
-                                Exemple: <code>{"first_name": "Jean", "birth_date": "1990-01-15"}</code>
+                                {% trans "JSON format with fields to add/modify." %}<br>
+                                {% trans "Example" %}: <code>{"first_name": "John", "birth_date": "1990-01-15"}</code>
                             </small>
                             {% if form.data.errors %}
                                 <div class="invalid-feedback d-block">
@@ -128,10 +129,10 @@
                         
                         <div class="d-grid gap-2 d-sm-flex">
                             <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-send"></i> Envoyer la proposition
+                                <i class="bi bi-send"></i> {% trans "Send Proposal" %}
                             </button>
                             <a href="{% url 'home' %}" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle"></i> Annuler
+                                <i class="bi bi-x-circle"></i> {% trans "Cancel" %}
                             </a>
                         </div>
                     </form>
@@ -141,11 +142,11 @@
             <!-- Alternatives Section -->
             <div class="alert alert-info border-start border-info border-3">
                 <h5 class="alert-heading">
-                    <i class="bi bi-lightbulb"></i> Formulaires simplifiés
+                    <i class="bi bi-lightbulb"></i> {% trans "Quick Forms" %}
                 </h5>
-                <p class="mb-2">Pour ajouter rapidement un époux/épouse ou un enfant, allez sur la page d'une personne et utilisez les boutons disponibles.</p>
+                <p class="mb-2">{% trans "To quickly add a spouse or child, go to a person's page and use the available buttons." %}</p>
                 <a href="{% url 'home' %}" class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-arrow-left"></i> Retour à l'accueil
+                    <i class="bi bi-arrow-left"></i> {% trans "Back to Home" %}
                 </a>
             </div>
         </div>

@@ -1,124 +1,175 @@
 # 🌳 Malbat.org - Family Tree
 
-Une application web Django pour gérer et visualiser un arbre généalogique avec support d'import Gramps.
+A Django web application to manage and visualize a family tree with Gramps import support.
 
 ## 📋 Description
 
-Malbat.org est une plateforme web complète permettant de gérer un arbre généalogique familial avec les fonctionnalités suivantes :
+Malbat.org is a complete web platform for managing a family genealogy with the following features:
 
-### ✨ Fonctionnalités principales
-- **Import Gramps** : Importer facilement vos données généalogiques depuis Gramps
-- **Visualisation interactive** : Parcourir et visualiser l'arbre généalogique
-- **Propositions de modifications** : Ajouter/modifier/supprimer des personnes et relations
-- **Système de validation** : Approuver ou rejeter les propositions de modifications
-- **Authentification utilisateur** : Gestion des utilisateurs et des droits d'accès
-- **Notifications email** : Alertes pour les propositions et validations
-- **Gestion des médias** : Associer des photos aux personnes
+### ✨ Key Features
+- **Gramps Import**: Easily import your genealogical data from Gramps
+- **Interactive Visualization**: Browse and visualize the family tree
+- **Modification Proposals**: Add/modify/delete people and relationships
+- **Validation System**: Approve or reject modification proposals
+- **User Authentication**: User management and access control
+- **Email Notifications**: Alerts for proposals and validations
+- **Media Management**: Associate photos with people
 
 ## 🚀 Installation
 
-### Prérequis
+### ⚡ Quick Install (One Command - Standalone Script)
+
+**The easiest way!** Just download and run the script - it handles everything:
+
+```bash
+# Option 1: Direct download and run
+curl -O https://raw.githubusercontent.com/vtiltay/malbat/main/install-malbat.sh
+bash install-malbat.sh
+
+# Option 2: Install in a specific directory
+bash install-malbat.sh /home/your-user
+```
+
+The script will automatically:
+- ✅ Check and install system dependencies (git, Python 3, build tools)
+- ✅ Clone the repository
+- ✅ Create Python virtual environment
+- ✅ Install all Python packages
+- ✅ Setup Django and database
+- ✅ Create superuser automatically
+- ✅ Collect static files
+
+**Default Credentials (created automatically):**
+- 👤 **Username**: `malbatuser`
+- 🔑 **Password**: `MalbatPass123`
+
+⚠️ **Important**: Change the password after your first login!
+
+**After installation**, start the server:
+```bash
+cd malbat.org
+source venv/bin/activate
+python manage.py runserver
+```
+
+Then access:
+- 🌐 **Website**: http://localhost:8000
+- 🔐 **Admin**: http://localhost:8000/admin/
+
+---
+
+### Manual Installation
+
+If you prefer to install manually or have a specific setup:
+
+#### Requirements
 
 - Python 3.8+
 - pip
-- Virtual environment (vivement recommandé)
-- PostgreSQL (optionnel, SQLite par défaut)
+- Virtual environment (highly recommended)
+- PostgreSQL (optional, SQLite by default)
 
-### Setup local
+#### Local Setup
 
 ```bash
-# 1. Cloner le dépôt
+# 1. Clone the repository
 git clone git@github.com:vtiltay/malbat.git
 cd malbat.org
 
-# 2. Créer et activer l'environnement virtuel
+# 2. Create and activate virtual environment
 python3 -m venv venv
 source venv/bin/activate  # Linux/Mac
-# ou sur Windows:
+# or on Windows:
 # venv\Scripts\activate
 
-# 3. Installer les dépendances
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Créer le fichier .env (copier depuis template si disponible)
-cp .env.example .env  # ou créer manuellement
+# 4. Create .env file
+cat > .env << EOF
+DEBUG=True
+SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe(50))')
+ALLOWED_HOSTS=localhost,127.0.0.1
+DATABASE_URL=sqlite:///db.sqlite3
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+EOF
 
-# 5. Appliquer les migrations
+# 5. Apply migrations
 python manage.py migrate
 
-# 6. Créer un superuser
+# 6. Create superuser
 python manage.py createsuperuser
 
-# 7. Collecter les fichiers statiques (production)
+# 7. Collect static files (production)
 python manage.py collectstatic --noinput
 
-# 8. Démarrer le serveur de développement
+# 8. Start development server
 python manage.py runserver
 ```
 
-Accéder à l'application : http://localhost:8000
+Access the application: http://localhost:8000
 
-## 📁 Structure du projet
+## 📁 Project Structure
 
 ```
 malbat.org/
-├── familytree/                  # Application Django principale
-│   ├── models.py                # Modèles (Person, FamilyChild, Event, etc.)
-│   ├── views.py                 # Vues et logique métier
-│   ├── forms.py                 # Formulaires
-│   ├── filters.py               # Filtres personnalisés
-│   ├── signals.py               # Signaux Django
-│   ├── admin.py                 # Configuration admin
+├── familytree/                  # Main Django application
+│   ├── models.py                # Models (Person, FamilyChild, Event, etc.)
+│   ├── views.py                 # Views and business logic
+│   ├── forms.py                 # Forms
+│   ├── filters.py               # Custom filters
+│   ├── signals.py               # Django signals
+│   ├── admin.py                 # Admin configuration
 │   ├── urls.py                  # Routes
 │   ├── management/
-│   │   └── commands/            # Commandes personnalisées
-│   │       └── import_gramps.py # Import de données Gramps
-│   ├── migrations/              # Migrations Django
-│   └── templates/               # Templates HTML
-├── malbat/                      # Configuration Django
-│   ├── settings.py              # Paramètres du projet
-│   ├── urls.py                  # URLs globales
-│   ├── wsgi.py                  # WSGI pour production
-│   └── asgi.py                  # ASGI pour WebSockets
-├── media/                       # Fichiers uploadés (ignoré Git)
-├── staticfiles/                 # Fichiers statiques compilés
-├── gramps/                      # Données Gramps (ignoré Git)
-├── manage.py                    # CLI Django
-├── restart_gunicorn.sh          # Script déploiement production
-├── requirements.txt             # Dépendances Python
-├── .env                         # Variables d'environnement (ignoré Git)
-├── .gitignore                   # Fichiers à ignorer
+│   │   └── commands/            # Custom commands
+│   │       └── import_gramps.py # Gramps data import
+│   ├── migrations/              # Django migrations
+│   └── templates/               # HTML templates
+├── malbat/                      # Django configuration
+│   ├── settings.py              # Project settings
+│   ├── urls.py                  # Global URLs
+│   ├── wsgi.py                  # WSGI for production
+│   └── asgi.py                  # ASGI for WebSockets
+├── media/                       # Uploaded files (ignored by Git)
+├── staticfiles/                 # Compiled static files
+├── gramps/                      # Gramps data (ignored by Git)
+├── manage.py                    # Django CLI
+├── restart_gunicorn.sh          # Production deployment script
+├── requirements.txt             # Python dependencies
+├── .env                         # Environment variables (ignored by Git)
+├── .gitignore                   # Files to ignore
 └── README.md                    # Documentation
 ```
 
-## 🔧 Commandes utiles
+## 🔧 Useful Commands
 
 ```bash
-# Lancer le serveur de développement
+# Start development server
 python manage.py runserver
 
-# Créer les migrations après modification des modèles
+# Create migrations after model changes
 python manage.py makemigrations
 
-# Appliquer les migrations
+# Apply migrations
 python manage.py migrate
 
-# Accéder à la console Django
+# Access Django shell
 python manage.py shell
 
-# Importer des données Gramps
-python manage.py import_gramps chemin/vers/fichier.gramps
+# Import Gramps data
+python manage.py import_gramps path/to/file.gramps
 
-# Créer un superuser
+# Create superuser
 python manage.py createsuperuser
 
-# Collecter les fichiers statiques
+# Collect static files
 python manage.py collectstatic
 ```
 
-## 📧 Configuration Email
+## 📧 Email Configuration
 
-Pour activer les notifications email, configurer les variables d'environnement :
+To enable email notifications, configure environment variables:
 
 ```env
 EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
@@ -130,83 +181,83 @@ EMAIL_HOST_PASSWORD=your-app-password
 DEFAULT_FROM_EMAIL=your-email@gmail.com
 ```
 
-## 🗄️ Modèles de données
+## 🗄️ Data Models
 
 ### Person
-Représente une personne dans l'arbre généalogique.
-- `first_name` : Prénom
-- `last_name` : Nom de famille
-- `gender` : Genre (M/F)
-- `birth_date` : Date de naissance
-- `death_date` : Date de décès
-- `is_deceased` : Statut décédé
-- `gramps_id` : ID Gramps
+Represents a person in the family tree.
+- `first_name`: First name
+- `last_name`: Last name
+- `gender`: Gender (M/F)
+- `birth_date`: Birth date
+- `death_date`: Death date
+- `is_deceased`: Deceased status
+- `gramps_id`: Gramps ID
 
 ### FamilyChild
-Relie les parents et enfants.
-- `parent` : Parent (Person)
-- `child` : Enfant (Person)
+Links parents and children.
+- `parent`: Parent (Person)
+- `child`: Child (Person)
 
 ### Event
-Événements liés aux personnes.
-- `person` : Personne concernée
-- `type` : Type d'événement (birth, death, marriage, etc.)
-- `date` : Date de l'événement
+Events related to people.
+- `person`: Person involved
+- `type`: Event type (birth, death, marriage, etc.)
+- `date`: Event date
 
 ### ProposedModification
-Système de proposition de modifications.
-- `proposer` : Utilisateur qui propose
-- `type` : Type de proposition
-- `status` : Statut (pending, approved, rejected)
-- `content` : Détails de la proposition
+System for proposing modifications.
+- `proposer`: User making proposal
+- `type`: Proposal type
+- `status`: Status (pending, approved, rejected)
+- `content`: Proposal details
 
-## 🔐 Sécurité
+## 🔐 Security
 
-- ⚠️ **Ne jamais commiter** : `.env`, `db.sqlite3`, clés SSH/API, données Gramps
-- ✅ Utiliser `.gitignore` pour exclure les fichiers sensibles
-- ✅ Configurer les secrets via variables d'environnement
-- ✅ Utiliser HTTPS en production
-- ✅ Activer CSRF protection (activé par défaut)
+- ⚠️ **Never commit**: `.env`, `db.sqlite3`, SSH/API keys, Gramps data
+- ✅ Use `.gitignore` to exclude sensitive files
+- ✅ Configure secrets via environment variables
+- ✅ Use HTTPS in production
+- ✅ Enable CSRF protection (enabled by default)
 
-## 📝 Déploiement
+## 📝 Deployment
 
-### Avec Gunicorn (production)
+### With Gunicorn (production)
 
 ```bash
 pip install gunicorn
 gunicorn malbat.wsgi:application --bind 0.0.0.0:8000
 ```
 
-Utiliser le script fourni :
+Or use the provided script:
 ```bash
 ./restart_gunicorn.sh
 ```
 
-### Avec Nginx
+### With Nginx
 
-Configurer Nginx comme reverse proxy pointant vers Gunicorn.
+Configure Nginx as a reverse proxy pointing to Gunicorn.
 
-## 📚 Documentation supplémentaire
+## 📚 Additional Documentation
 
 - [Django Documentation](https://docs.djangoproject.com/)
 - [Gramps Documentation](https://gramps-project.org/)
 
-## 🤝 Contribution
+## 🤝 Contributing
 
-Pour contribuer :
-1. Créer une branche feature : `git checkout -b feature/ma-feature`
-2. Commit les changements : `git commit -am 'Add new feature'`
-3. Pousser la branche : `git push origin feature/ma-feature`
-4. Ouvrir une Pull Request
+To contribute:
+1. Create a feature branch: `git checkout -b feature/my-feature`
+2. Commit changes: `git commit -am 'Add new feature'`
+3. Push the branch: `git push origin feature/my-feature`
+4. Open a Pull Request
 
-## 📄 Licence
+## 📄 License
 
-À définir
+To be defined
 
-## 👤 Auteur
+## 👤 Author
 
-Tiltay - vtiltay@gmail.com
+Victor Tiltay - vtiltay@gmail.com
 
 ---
 
-**Dernière mise à jour** : 3 janvier 2026
+**Last Updated**: January 3, 2026
