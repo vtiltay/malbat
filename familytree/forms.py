@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.utils.translation import gettext_lazy as _
 from .models import ProposedModification, Person
 
 
@@ -16,21 +17,21 @@ class RegisterForm(UserCreationForm):
         max_length=150,
         widget=forms.TextInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Nom d\'utilisateur'
+            'placeholder': 'Username'
         })
     )
     password1 = forms.CharField(
-        label='Mot de passe',
+        label=_('Password'),
         widget=forms.PasswordInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Mot de passe'
+            'placeholder': 'Password'
         })
     )
     password2 = forms.CharField(
-        label='Confirmer le mot de passe',
+        label=_('Confirm password'),
         widget=forms.PasswordInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Confirmer le mot de passe'
+            'placeholder': 'Confirm password'
         })
     )
 
@@ -41,13 +42,13 @@ class RegisterForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError('Cet email est déjà utilisé.')
+            raise forms.ValidationError(_('This email is already in use.'))
         return email
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():
-            raise forms.ValidationError('Ce nom d\'utilisateur est déjà pris.')
+            raise forms.ValidationError(_('This username is already taken.'))
         return username
 
 
@@ -56,21 +57,21 @@ class LoginForm(forms.Form):
         max_length=150,
         widget=forms.TextInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Nom d\'utilisateur ou email',
+            'placeholder': 'Username or email',
             'autocomplete': 'username'
         })
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Mot de passe',
+            'placeholder': 'Password',
             'autocomplete': 'current-password'
         })
     )
 
 
 class ProposedModificationForm(forms.ModelForm):
-    """Formulaire pour proposer une modification (ajout, modification, suppression)"""
+    """Form to propose a modification (add, update, delete)"""
     
     class Meta:
         model = ProposedModification
@@ -87,7 +88,7 @@ class ProposedModificationForm(forms.ModelForm):
             }),
             'entity_id': forms.TextInput(attrs={
                 'class': 'form-input',
-                'placeholder': 'ID Gramps (pour modification/suppression)',
+                'placeholder': 'Gramps ID (for update/deletion)',
                 'required': False,
             }),
             'data': forms.Textarea(attrs={
@@ -97,57 +98,57 @@ class ProposedModificationForm(forms.ModelForm):
             }),
         }
         labels = {
-            'action': 'Type d\'action',
-            'entity_type': 'Type de relation',
-            'person': 'Personne concernée *',
-            'entity_id': 'ID de la personne à modifier (Gramps ID)',
-            'data': 'Données (format JSON)',
+            'action': _('Action type'),
+            'entity_type': _('Relationship type'),
+            'person': _('Affected person *'),
+            'entity_id': _('Person ID to update (Gramps ID)'),
+            'data': _('Data (JSON format)'),
         }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personnaliser les options du formulaire
         self.fields['person'].queryset = Person.objects.all().order_by('last_name', 'first_name')
-        self.fields['person'].label = 'Votre profil / Personne concernée *'
+        self.fields['person'].label = _('Your profile / Affected person *')
         # Rendre le champ obligatoire
         self.fields['person'].required = True
     
     def clean_person(self):
-        """Valider que la personne est sélectionnée"""
+        """Validate that a person is selected"""
         person = self.cleaned_data.get('person')
         if not person:
-            raise forms.ValidationError('Vous devez sélectionner une personne concernée par cette proposition.')
+            raise forms.ValidationError(_('You must select a person affected by this proposal.'))
         return person
 
 
 class AddSpouseForm(forms.Form):
-    """Formulaire simplifié pour proposer l'ajout d'un époux/épouse"""
+    """Simplified form to propose adding a spouse"""
     first_name = forms.CharField(
         max_length=100,
-        label='Prénom',
+        label=_('First name'),
         widget=forms.TextInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Prénom',
+            'placeholder': 'First name',
         })
     )
     last_name = forms.CharField(
         max_length=100,
-        label='Nom',
+        label=_('Last name'),
         widget=forms.TextInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Nom',
+            'placeholder': 'Last name',
         })
     )
     gender = forms.ChoiceField(
-        choices=[('M', 'Homme'), ('F', 'Femme'), ('U', 'Inconnu')],
-        label='Genre',
+        choices=[('M', _('Male')), ('F', _('Female')), ('U', _('Unknown'))],
+        label=_('Gender'),
         widget=forms.RadioSelect(attrs={
             'class': 'form-radio',
         })
     )
     birth_date = forms.DateField(
         required=False,
-        label='Date de naissance',
+        label=_('Birth date'),
         widget=forms.DateInput(attrs={
             'class': 'form-input',
             'type': 'date',
@@ -156,33 +157,33 @@ class AddSpouseForm(forms.Form):
 
 
 class AddChildForm(forms.Form):
-    """Formulaire simplifié pour proposer l'ajout d'un enfant"""
+    """Simplified form to propose adding a child"""
     first_name = forms.CharField(
         max_length=100,
-        label='Prénom',
+        label=_('First name'),
         widget=forms.TextInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Prénom',
+            'placeholder': 'First name',
         })
     )
     last_name = forms.CharField(
         max_length=100,
-        label='Nom',
+        label=_('Last name'),
         widget=forms.TextInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Nom',
+            'placeholder': 'Last name',
         })
     )
     gender = forms.ChoiceField(
-        choices=[('M', 'Homme'), ('F', 'Femme'), ('U', 'Inconnu')],
-        label='Genre',
+        choices=[('M', _('Male')), ('F', _('Female')), ('U', _('Unknown'))],
+        label=_('Gender'),
         widget=forms.RadioSelect(attrs={
             'class': 'form-radio',
         })
     )
     birth_date = forms.DateField(
         required=False,
-        label='Date de naissance',
+        label=_('Birth date'),
         widget=forms.DateInput(attrs={
             'class': 'form-input',
             'type': 'date',
@@ -191,17 +192,17 @@ class AddChildForm(forms.Form):
 
 
 class DeletePersonForm(forms.Form):
-    """Formulaire pour proposer la suppression d'une personne"""
+    """Form to propose deleting a person"""
     entity_id = forms.CharField(
         max_length=255,
-        label='ID de la personne à supprimer (Gramps ID)',
+        label=_('Person ID to delete (Gramps ID)'),
         widget=forms.TextInput(attrs={
             'class': 'form-input',
-            'placeholder': 'ex: I0001',
+            'placeholder': 'e.g. I0001',
         })
     )
     confirmation = forms.BooleanField(
-        label='Je confirme la suppression',
+        label=_('I confirm the deletion'),
         required=True,
         widget=forms.CheckboxInput(attrs={
             'class': 'form-checkbox',

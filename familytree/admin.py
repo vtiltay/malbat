@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from .models import Person, Family, Event, Place, Note, Media, GrampsImport, ProposedModification
 import json
 
@@ -46,47 +47,47 @@ class ProposedModificationAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     
     fieldsets = (
-        ('Informations de la proposition', {
+        (_('Proposal information'), {
             'fields': ('user_display', 'action', 'entity_type', 'person', 'entity_id', 'created_at', 'updated_at')
         }),
-        ('Données proposées', {
+        (_('Proposed data'), {
             'fields': ('data_formatted',),
             'classes': ('collapse',)
         }),
-        ('Traitement par l\'admin', {
+        (_('Admin processing'), {
             'fields': ('status', 'admin_notes'),
-            'description': 'Marquez le statut après traitement dans Gramps et ajoutez des notes'
+            'description': _('Mark the status after processing in Gramps and add notes')
         }),
     )
     
-    # Rendre les champs non éditables
+    # Make fields non-editable
     def get_readonly_fields(self, request, obj=None):
         readonly = list(self.readonly_fields)
-        if obj:  # Édition
+        if obj:  # Edit mode
             readonly.extend(['user', 'action', 'entity_type', 'person', 'entity_id', 'data'])
         return readonly
     
     def user_display(self, obj):
-        """Afficher l'utilisateur avec un lien vers son profil admin"""
+        """Display user with a link to their admin profile"""
         if obj.user:
             return format_html(
                 '<a href="/admin/auth/user/{}/change/">{}</a>',
                 obj.user.id, obj.user.get_full_name() or obj.user.username
             )
         return "—"
-    user_display.short_description = 'Utilisateur'
+    user_display.short_description = _('User')
     
     def action_badge(self, obj):
-        """Badge coloré pour l'action"""
+        """Colored badge for the action"""
         colors = {'add': '#28a745', 'update': '#007bff', 'delete': '#dc3545'}
-        labels = {'add': '➕ Ajouter', 'update': '✏️ Modifier', 'delete': '🗑️ Supprimer'}
+        labels = {'add': '➕ ' + _('Add').upper(), 'update': '✏️ ' + _('Update').upper(), 'delete': '🗑️ ' + _('Delete').upper()}
         color = colors.get(obj.action, '#6c757d')
         label = labels.get(obj.action, obj.action)
         return format_html(
             '<span style="background-color: {}; color: white; padding: 5px 10px; border-radius: 3px; font-weight: bold;">{}</span>',
             color, label
         )
-    action_badge.short_description = 'Action'
+    action_badge.short_description = _('Action')
     
     def entity_type_display(self, obj):
         """Afficher le type d'entité de manière lisible"""
@@ -116,12 +117,12 @@ class ProposedModificationAdmin(admin.ModelAdmin):
     status_badge.short_description = 'Statut'
     
     def created_at_display(self, obj):
-        """Afficher la date de création de manière lisible"""
+        """Display creation date in readable format"""
         return obj.created_at.strftime('%d/%m/%Y %H:%M')
-    created_at_display.short_description = 'Proposée le'
+    created_at_display.short_description = _('Proposed on')
     
     def data_formatted(self, obj):
-        """Afficher les données en JSON formaté"""
+        """Display data in formatted JSON"""
         try:
             data_str = json.dumps(obj.data, indent=2, ensure_ascii=False)
         except:
@@ -130,8 +131,8 @@ class ProposedModificationAdmin(admin.ModelAdmin):
             '<pre style="background: #f5f5f5; padding: 10px; border-radius: 3px; font-size: 12px; max-height: 400px; overflow: auto;">{}</pre>',
             data_str
         )
-    data_formatted.short_description = 'Données proposées'
+    data_formatted.short_description = _('Proposed data')
     
     def has_add_permission(self, request):
-        """Les propositions ne peuvent être créées que via le formulaire utilisateur"""
+        """Proposals can only be created via the user form"""
         return False

@@ -3,26 +3,27 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from .models import ProposedModification
 
 
 @receiver(post_save, sender=ProposedModification)
 def send_proposal_notification(sender, instance, created, **kwargs):
-    """Envoyer une notification par email aux administrateurs quand une proposition est créée"""
+    """Send email notification to administrators when a proposal is created"""
     if not created:
-        return  # Ne pas envoyer si c'est une mise à jour
+        return  # Do not send if this is an update
     
     try:
-        # Récupérer les administrateurs
+        # Retrieve administrators
         admins = User.objects.filter(is_staff=True)
         admin_emails = [admin.email for admin in admins if admin.email]
         
         if not admin_emails:
-            return  # Pas d'administrateurs avec email
+            return  # No administrators with email
         
-        # Préparer le contenu du mail
-        subject = f'[Généalogie] Nouvelle proposition #{instance.id}: {instance.get_action_display()} {instance.get_entity_type_display()}'
+        # Prepare email content
+        subject = f'[Genealogy] New proposal #{instance.id}: {instance.get_action_display()} {instance.get_entity_type_display()}'
         
         context = {
             'proposal': instance,
@@ -32,11 +33,11 @@ def send_proposal_notification(sender, instance, created, **kwargs):
             'entity_type': instance.get_entity_type_display(),
         }
         
-        # Rendu du template HTML
+        # Render HTML template
         html_message = render_to_string('familytree/emails/proposal_notification.html', context)
         plain_message = strip_tags(html_message)
         
-        # Envoyer le mail
+        # Send email
         send_mail(
             subject,
             plain_message,
@@ -46,7 +47,7 @@ def send_proposal_notification(sender, instance, created, **kwargs):
             fail_silently=True,
         )
     except Exception as e:
-        # Enregistrer l'erreur mais ne pas bloquer la création de la proposition
+        # Log error but do not block proposal creation
         import logging
         logger = logging.getLogger(__name__)
-        logger.error(f'Erreur lors de l\'envoi de l\'email de notification: {e}')
+        logger.error(f'Error sending notification email: {e}')

@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 import xml.etree.ElementTree as ET
 import gzip
 import tarfile
@@ -315,12 +316,12 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, 'Inscription réussie! Vous êtes maintenant connecté.')
+            messages.success(request, _('Registration successful! You are now logged in.'))
             return redirect('home')
         else:
             for field, errors in form.errors.items():
                 for error in errors:
-                    messages.error(request, f'{field}: {error}')
+                    messages.error(request, _(f'{field}: {error}'))
     else:
         form = RegisterForm()
     
@@ -350,10 +351,10 @@ def login_view(request):
             
             if user is not None:
                 login(request, user)
-                messages.success(request, f'Bienvenue {user.username}!')
+                messages.success(request, _(f'Welcome {user.username}!'))
                 return redirect('home')
             else:
-                messages.error(request, 'Nom d\'utilisateur/email ou mot de passe incorrect.')
+                messages.error(request, _('Invalid username/email or password.'))
     else:
         form = LoginForm()
     
@@ -362,7 +363,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    messages.success(request, 'Vous avez été déconnecté.')
+    messages.success(request, _('You have been logged out.'))
     return redirect('login')
 
 
@@ -388,11 +389,11 @@ def propose_modification(request):
                 try:
                     modification.data = json.loads(modification.data)
                 except json.JSONDecodeError:
-                    messages.error(request, 'Le format JSON des données est invalide.')
+                    messages.error(request, _('The JSON format of the data is invalid.'))
                     return render(request, 'familytree/propose_modification.html', {'form': form})
             
             modification.save()
-            messages.success(request, f'Votre proposition a été envoyée à l\'administrateur. Numéro: #{modification.id}')
+            messages.success(request, _(f'Your proposal has been sent to the administrator. Number: #{modification.id}'))
             return redirect('home')
     else:
         form = ProposedModificationForm()
@@ -423,7 +424,7 @@ def propose_spouse(request, gramps_id_numeric):
                     'birth_date': str(form.cleaned_data['birth_date']) if form.cleaned_data['birth_date'] else None,
                 }
             )
-            messages.success(request, f'Votre proposition d\'ajout d\'époux a été envoyée. Numéro: #{modification.id}')
+            messages.success(request, _(f'Your spouse addition proposal has been sent. Number: #{modification.id}'))
             return redirect('person_detail', gramps_id_numeric=gramps_id_numeric)
     else:
         form = AddSpouseForm()
@@ -458,7 +459,7 @@ def propose_child(request, gramps_id_numeric):
                     'birth_date': str(form.cleaned_data['birth_date']) if form.cleaned_data['birth_date'] else None,
                 }
             )
-            messages.success(request, f'Votre proposition d\'ajout d\'enfant a été envoyée. Numéro: #{modification.id}')
+            messages.success(request, _(f'Your child addition proposal has been sent. Number: #{modification.id}'))
             return redirect('person_detail', gramps_id_numeric=gramps_id_numeric)
     else:
         form = AddChildForm()
@@ -489,7 +490,7 @@ def propose_delete(request, gramps_id_numeric):
                 entity_id=person.gramps_id,
                 data={}
             )
-            messages.success(request, f'Votre proposition de suppression a été envoyée. Numéro: #{modification.id}')
+            messages.success(request, _(f'Your deletion proposal has been sent. Number: #{modification.id}'))
             return redirect('home')
     else:
         form = DeletePersonForm()
