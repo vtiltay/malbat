@@ -62,32 +62,33 @@ Accéder à l'application : http://localhost:8000
 
 ```
 malbat.org/
-├── familytree/              # Application Django principale
-│   ├── models.py            # Modèles (Person, FamilyChild, Event, etc.)
-│   ├── views.py             # Vues et logique métier
-│   ├── forms.py             # Formulaires
-│   ├── urls.py              # Routes
-│   ├── filters.py           # Filtres personnalisés
-│   ├── signals.py           # Signaux Django
-│   ├── admin.py             # Configuration admin
+├── familytree/                  # Application Django principale
+│   ├── models.py                # Modèles (Person, FamilyChild, Event, etc.)
+│   ├── views.py                 # Vues et logique métier
+│   ├── forms.py                 # Formulaires
+│   ├── filters.py               # Filtres personnalisés
+│   ├── signals.py               # Signaux Django
+│   ├── admin.py                 # Configuration admin
+│   ├── urls.py                  # Routes
 │   ├── management/
-│   │   └── commands/        # Commandes personnalisées
-│   │       ├── import_gramps.py
-│   │       └── test_proposal_email.py
-│   ├── migrations/          # Migrations Django
-│   └── templates/           # Templates HTML
-├── malbat/                  # Configuration Django
-│   ├── settings.py          # Paramètres du projet
-│   ├── urls.py              # URLs globales
-│   ├── wsgi.py              # WSGI pour production
-│   └── asgi.py              # ASGI pour WebSockets
-├── gramps/                  # Données Gramps (ignoré par Git)
-├── media/                   # Fichiers uploadés (ignoré par Git)
-├── staticfiles/             # Fichiers statiques compilés
-├── requirements.txt         # Dépendances Python
-├── manage.py                # Utilitaire Django
-├── db.sqlite3               # Base de données (ignoré par Git)
-└── .gitignore               # Fichiers à ignorer
+│   │   └── commands/            # Commandes personnalisées
+│   │       └── import_gramps.py # Import de données Gramps
+│   ├── migrations/              # Migrations Django
+│   └── templates/               # Templates HTML
+├── malbat/                      # Configuration Django
+│   ├── settings.py              # Paramètres du projet
+│   ├── urls.py                  # URLs globales
+│   ├── wsgi.py                  # WSGI pour production
+│   └── asgi.py                  # ASGI pour WebSockets
+├── media/                       # Fichiers uploadés (ignoré Git)
+├── staticfiles/                 # Fichiers statiques compilés
+├── gramps/                      # Données Gramps (ignoré Git)
+├── manage.py                    # CLI Django
+├── restart_gunicorn.sh          # Script déploiement production
+├── requirements.txt             # Dépendances Python
+├── .env                         # Variables d'environnement (ignoré Git)
+├── .gitignore                   # Fichiers à ignorer
+└── README.md                    # Documentation
 ```
 
 ## 🔧 Commandes utiles
@@ -107,9 +108,6 @@ python manage.py shell
 
 # Importer des données Gramps
 python manage.py import_gramps chemin/vers/fichier.gramps
-
-# Tester les emails
-python manage.py test_proposal_email
 
 # Créer un superuser
 python manage.py createsuperuser
@@ -190,8 +188,6 @@ Configurer Nginx comme reverse proxy pointant vers Gunicorn.
 
 ## 📚 Documentation supplémentaire
 
-- [Email Configuration](EMAIL_CONFIG.md)
-- [Email Setup Final](EMAIL_SETUP_FINAL.md)
 - [Django Documentation](https://docs.djangoproject.com/)
 - [Gramps Documentation](https://gramps-project.org/)
 
@@ -209,7 +205,7 @@ Pour contribuer :
 
 ## 👤 Auteur
 
-Victor Tiltay - victor@malbat.org
+Tiltay - vtiltay@gmail.com
 
 ---
 
