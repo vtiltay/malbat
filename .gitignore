@@ -28,6 +28,7 @@ venv/
 ENV/
 env/
 .venv
+/srv/venvs/
 
 # Django
 *.log
@@ -38,6 +39,7 @@ db.sqlite3-journal
 /staticfiles/
 .env
 .env.local
+*.env
 
 # IDE
 .vscode/
@@ -57,11 +59,30 @@ htmlcov/
 
 # Database backups
 *.sql
+*.dump
 
-# Gramps
-gramps/temp_extract/
+# Gramps - Données généalogiques personnelles
+/gramps/
 media/gramps_imports/
+*.gramps
+*.gpkg
+
+# Fichiers sensibles et personnels
+*.pem
+*.key
+*.pub
+secrets.json
+config.local.py
+local_settings.py
+.aws/
+.credentials
 
 # Temporary files
 *.tmp
 *.bak
+*.swp
+*~
+
+# Logs
+logs/
+*.log
