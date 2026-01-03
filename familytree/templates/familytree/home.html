@@ -1,0 +1,281 @@
+{% extends "familytree/base.html" %}
+
+{% block title %}Accueil - Mala Haco & Izêr{% endblock %}
+
+{% block content %}
+    <!-- Search Section -->
+    <section class="mb-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h4 class="card-title mb-3">
+                    <i class="bi bi-search text-primary"></i> Rechercher une personne
+                </h4>
+                <form method="get" action="{% url 'home' %}" class="row g-3">
+                    <div class="col-md-10">
+                        <input type="text" name="q" class="form-control form-control-lg" 
+                               placeholder="Entrez un nom, prénom ou ID Gramps..." 
+                               value="{{ search_query }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="bi bi-search"></i> Rechercher
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Results -->
+    {% if search_query %}
+    <section class="mb-5">
+        <h4 class="mb-3">
+            <i class="bi bi-people"></i> Résultats pour "{{ search_query }}"
+            <span class="badge bg-secondary">{{ people.paginator.count }} trouvé{{ people.paginator.count|pluralize }}</span>
+        </h4>
+        
+        {% if people %}
+        <div class="table-responsive">
+            <table class="table table-hover shadow-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Genre</th>
+                        <th>Naissance</th>
+                        <th>Décès</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for person in people %}
+                    <tr>
+                        <td><code>{{ person.gramps_id }}</code></td>
+                        <td>{{ person.first_name }}</td>
+                        <td><strong>{{ person.last_name }}</strong></td>
+                        <td>
+                            {% if person.gender == 'M' %}
+                                <span class="badge bg-info">👨 Homme</span>
+                            {% elif person.gender == 'F' %}
+                                <span class="badge bg-danger">👩 Femme</span>
+                            {% else %}
+                                <span class="badge bg-secondary">❓ Inconnu</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ person.birth_date|date:"d/m/Y"|default:"-" }}</td>
+                        <td>
+                            {% if person.death_date %}
+                                {{ person.death_date|date:"d/m/Y" }}
+                            {% elif person.is_deceased %}
+                                <span class="text-muted">Décédé(e)</span>
+                            {% else %}
+                                <span class="text-success">Vivant(e)</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'person_detail' person.gramps_id_numeric %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i> Voir
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if people.has_other_pages %}
+        <nav aria-label="Navigation des résultats">
+            <ul class="pagination justify-content-center">
+                {% if people.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ search_query }}&page={{ people.previous_page_number }}">&laquo; Précédent</a>
+                </li>
+                {% endif %}
+                
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ people.number }} sur {{ people.paginator.num_pages }}</span>
+                </li>
+                
+                {% if people.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ search_query }}&page={{ people.next_page_number }}">Suivant &raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> Aucune personne trouvée pour "{{ search_query }}".
+        </div>
+        {% endif %}
+    </section>
+    
+    <hr class="my-5">
+    {% endif %}
+
+    <!-- Hero Section -->
+    <section class="mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="mb-3">
+                    <i class="bi bi-diagram-3 text-primary"></i>
+                    Découvrez votre Arbre Généalogique
+                </h1>
+                <p class="lead text-muted mb-4">
+                    Explorez les histoires de votre famille à travers les générations. Une plateforme privée et sécurisée pour documenter et partager votre généalogie.
+                </p>
+                {% if not user.is_authenticated %}
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-plus"></i> Créer un compte
+                        </a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'my_proposals' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-clipboard-check"></i> Voir mes propositions
+                    </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body text-center p-5">
+                        <div class="display-1 mb-3">🌳</div>
+                        <h3 class="card-title">Votre Patrimoine Familial</h3>
+                        <p class="card-text text-muted">
+                            Conservez et transmettez l'histoire de votre famille pour les générations à venir.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="my-5">
+
+    <!-- Statistics Section -->
+    {% if total_people > 0 %}
+    <section class="mb-5">
+        <h2 class="mb-4 text-center">
+            <i class="bi bi-graph-up"></i> Statistiques de la Généalogie
+        </h2>
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-primary fs-2">{{ total_people }}</h3>
+                        <p class="card-text text-muted">Personnes enregistrées</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-danger fs-2">{{ total_families }}</h3>
+                        <p class="card-text text-muted">Familles documentées</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-success fs-2">{{ living_count }}</h3>
+                        <p class="card-text text-muted">Personnes vivantes</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-warning fs-2">{{ deceased_count }}</h3>
+                        <p class="card-text text-muted">Personnes décédées</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if earliest_birth %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-info fs-2">{{ earliest_birth|date:"Y" }}</h3>
+                        <p class="card-text text-muted">Ancêtre le plus ancien</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if latest_birth %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-secondary fs-2">{{ latest_birth|date:"Y" }}</h3>
+                        <p class="card-text text-muted">Génération la plus récente</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <hr class="my-5">
+    {% endif %}
+
+    <!-- Features Section -->
+    <section>
+        <h2 class="mb-4 text-center">
+            <i class="bi bi-star"></i> Fonctionnalités principales
+        </h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-primary mb-3">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <h5 class="card-title">Arbre Généalogique</h5>
+                        <p class="card-text text-muted">
+                            Visualisez les connexions familiales à travers les générations de manière intuitive et moderne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-danger mb-3">
+                            <i class="bi bi-person-hearts"></i>
+                        </div>
+                        <h5 class="card-title">Profils Détaillés</h5>
+                        <p class="card-text text-muted">
+                            Découvrez les histoires et les vies de vos ancêtres avec informations complètes et photos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-success mb-3">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <h5 class="card-title">Privé & Sécurisé</h5>
+                        <p class="card-text text-muted">
+                            Vos données familiales restent privées et protégées avec nos mesures de sécurité avancées.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

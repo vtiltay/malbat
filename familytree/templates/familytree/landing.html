@@ -1,0 +1,175 @@
+{% extends "familytree/base.html" %}
+
+{% block title %}Accueil - Mala Haco & Izêr{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="mb-3">
+                    <i class="bi bi-diagram-3 text-primary"></i>
+                    Découvrez votre Arbre Généalogique
+                </h1>
+                <p class="lead text-muted mb-4">
+                    Explorez les histoires de votre famille à travers les générations. Une plateforme privée et sécurisée pour documenter et partager votre généalogie.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-person-plus"></i> Créer un compte
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body text-center p-5">
+                        <div class="display-1 mb-3">🌳</div>
+                        <h3 class="card-title">Votre Patrimoine Familial</h3>
+                        <p class="card-text text-muted">
+                            Conservez et transmettez l'histoire de votre famille pour les générations à venir.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="my-5">
+
+    <!-- Statistics Section -->
+    {% if total_people > 0 %}
+    <section class="mb-5">
+        <h2 class="mb-4 text-center">
+            <i class="bi bi-graph-up"></i> Statistiques de la Généalogie
+        </h2>
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-primary fs-2">{{ total_people }}</h3>
+                        <p class="card-text text-muted">Personnes enregistrées</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-danger fs-2">{{ total_families }}</h3>
+                        <p class="card-text text-muted">Familles documentées</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-success fs-2">{{ living_count }}</h3>
+                        <p class="card-text text-muted">Personnes vivantes</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-warning fs-2">{{ deceased_count }}</h3>
+                        <p class="card-text text-muted">Personnes décédées</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if earliest_birth %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-info fs-2">{{ earliest_birth|date:"Y" }}</h3>
+                        <p class="card-text text-muted">Ancêtre le plus ancien</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if latest_birth %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-secondary fs-2">{{ latest_birth|date:"Y" }}</h3>
+                        <p class="card-text text-muted">Génération la plus récente</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <hr class="my-5">
+    {% endif %}
+
+    <!-- Features Section -->
+    <section>
+        <h2 class="mb-4 text-center">
+            <i class="bi bi-star"></i> Fonctionnalités principales
+        </h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-primary mb-3">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <h5 class="card-title">Arbre Généalogique</h5>
+                        <p class="card-text text-muted">
+                            Visualisez les connexions familiales à travers les générations de manière intuitive et moderne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-danger mb-3">
+                            <i class="bi bi-person-hearts"></i>
+                        </div>
+                        <h5 class="card-title">Profils Détaillés</h5>
+                        <p class="card-text text-muted">
+                            Découvrez les histoires et les vies de vos ancêtres avec informations complètes et photos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-success mb-3">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <h5 class="card-title">Privé & Sécurisé</h5>
+                        <p class="card-text text-muted">
+                            Votre accès aux données familiales est protégé par authentification sécurisée.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="mt-5 p-5 bg-light rounded-lg text-center">
+        <h3 class="mb-4">Prêt à explorer votre généalogie ?</h3>
+        <p class="text-muted mb-4">Créez un compte ou connectez-vous pour accéder à toutes les fonctionnalités.</p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                <i class="bi bi-person-plus"></i> Créer un compte
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-box-arrow-in-right"></i> Se connecter
+            </a>
+        </div>
+    </section>
+{% endblock %}

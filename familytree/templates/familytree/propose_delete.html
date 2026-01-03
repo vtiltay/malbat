@@ -1,0 +1,68 @@
+{% extends "familytree/base.html" %}
+
+{% block title %}Proposer une suppression{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="alert alert-danger border-start border-danger border-3 mb-4" role="alert">
+                <h4 class="alert-heading">
+                    <i class="bi bi-exclamation-triangle"></i> Proposer une suppression
+                </h4>
+                <p class="mb-0">Vous allez proposer la suppression de <strong>{{ person.first_name }} {{ person.last_name }}</strong></p>
+                <p class="mb-0 mt-2 small">Cette action est irréversible. L'administrateur devra examiner votre demande et la valider.</p>
+            </div>
+
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-4 p-3 bg-light rounded">
+                            <div class="small text-muted text-uppercase fw-bold mb-2">Personne à supprimer</div>
+                            <div class="fw-bold">{{ person.first_name }} {{ person.last_name }}</div>
+                            {% if person.birth_date %}
+                                <div class="small text-muted mt-1">
+                                    <i class="bi bi-calendar"></i> Né(e) le {{ person.birth_date|date:"d/m/Y" }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input 
+                                    type="checkbox" 
+                                    name="confirmation" 
+                                    id="{{ form.confirmation.id_for_label }}" 
+                                    class="form-check-input {% if form.confirmation.errors %}is-invalid{% endif %}"
+                                    required
+                                >
+                                <label class="form-check-label" for="{{ form.confirmation.id_for_label }}">
+                                    Je confirme la suppression de {{ person.first_name }} {{ person.last_name }}
+                                </label>
+                            </div>
+                            {% if form.confirmation.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.confirmation.errors %}
+                                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-sm-flex">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Confirmer la suppression
+                            </button>
+                            <a href="{% url 'person_detail' gramps_id_numeric=person.gramps_id_numeric %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i> Annuler
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

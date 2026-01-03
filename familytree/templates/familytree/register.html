@@ -1,0 +1,134 @@
+{% extends "familytree/base.html" %}
+
+{% block title %}S'inscrire - Mala Haco & Izêr{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-sm-8 col-md-6 col-lg-5">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="card-title text-center mb-2">
+                        <i class="bi bi-person-plus"></i> S'inscrire
+                    </h1>
+                    <p class="text-center text-muted mb-4">
+                        Créez votre compte pour explorer votre généalogie
+                    </p>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">
+                                <i class="bi bi-person"></i> Nom d'utilisateur
+                            </label>
+                            <input 
+                                type="text" 
+                                name="username" 
+                                id="{{ form.username.id_for_label }}" 
+                                class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                                placeholder="Choisissez un nom d'utilisateur" 
+                                required
+                                autofocus
+                            >
+                            {% if form.username.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.username.errors %}
+                                        <div><i class="bi bi-exclamation-circle"></i> {{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <small class="text-muted d-block mt-1">Au maximum 150 caractères. Lettres, chiffres et @/./+/-/_ uniquement.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">
+                                <i class="bi bi-envelope"></i> Adresse email
+                            </label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                id="{{ form.email.id_for_label }}" 
+                                class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                                placeholder="votre@email.com"
+                            >
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.email.errors %}
+                                        <div><i class="bi bi-exclamation-circle"></i> {{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.password1.id_for_label }}" class="form-label">
+                                <i class="bi bi-lock"></i> Mot de passe
+                            </label>
+                            <input 
+                                type="password" 
+                                name="password1" 
+                                id="{{ form.password1.id_for_label }}" 
+                                class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+                                placeholder="Choisissez un mot de passe sécurisé" 
+                                required
+                            >
+                            {% if form.password1.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.password1.errors %}
+                                        <div><i class="bi bi-exclamation-circle"></i> {{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="{{ form.password2.id_for_label }}" class="form-label">
+                                <i class="bi bi-lock-check"></i> Confirmation mot de passe
+                            </label>
+                            <input 
+                                type="password" 
+                                name="password2" 
+                                id="{{ form.password2.id_for_label }}" 
+                                class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                                placeholder="Confirmer votre mot de passe" 
+                                required
+                            >
+                            {% if form.password2.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.password2.errors %}
+                                        <div><i class="bi bi-exclamation-circle"></i> {{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-2 mb-3">
+                            <i class="bi bi-person-plus"></i> Créer un compte
+                        </button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <p class="text-center text-muted mb-0">
+                        Vous avez déjà un compte? 
+                        <a href="{% url 'login' %}" class="text-decoration-none fw-bold">
+                            Se connecter
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Security Info -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body p-3">
+                    <h6 class="card-title">
+                        <i class="bi bi-shield-check"></i> Sécurité
+                    </h6>
+                    <small class="text-muted">
+                        Votre mot de passe doit contenir au moins 8 caractères et ne doit pas être trop similaire à vos informations personnelles.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
