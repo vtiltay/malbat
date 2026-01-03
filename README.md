@@ -132,8 +132,6 @@ EMAIL_HOST_PASSWORD=your-app-password
 DEFAULT_FROM_EMAIL=your-email@gmail.com
 ```
 
-Voir [EMAIL_CONFIG.md](EMAIL_CONFIG.md) et [EMAIL_SETUP_FINAL.md](EMAIL_SETUP_FINAL.md) pour plus de détails.
-
 ## 🗄️ Modèles de données
 
 ### Person
