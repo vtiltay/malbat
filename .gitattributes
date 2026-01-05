@@ -1,0 +1,9 @@
+# Treat all HTML files as documentation/templates so they don't count towards the language stats
+*.html linguist-detectable=false
+
+# If you have a lot of CSS/SCSS you want to hide from the stats
+*.css linguist-detectable=false
+*.scss linguist-detectable=false
+
+# If you want to make sure your migrations don't count (they are auto-generated)
+**/migrations/*.py linguist-generated
