@@ -1,3 +1,33 @@
+# Logging configuration: write errors to /var/log/django-error.log
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/django-error.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
 """
 Django settings for malbat project.
 
@@ -30,7 +60,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-%l8^s&4bu9ws58+n5ht#v7t2ud
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'  # FIXED: Defaults to False
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,192.168.1.3').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,192.168.1.3,malbat.org,www.malbat.org').split(',')
 
 
 # Application definition
@@ -42,6 +72,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',  # Pour les extensions PostgreSQL
     'familytree',
 ]
 
@@ -82,8 +113,12 @@ WSGI_APPLICATION = 'malbat.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'malbat_db'),
+        'USER': os.getenv('DB_USER', 'malbat_user'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'pkzG+VWJuJFNASX2fmJ12+iA/H8JHgXcI7puqNHCHig'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 

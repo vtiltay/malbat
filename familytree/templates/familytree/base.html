@@ -178,51 +178,35 @@
         
         /* Cartes de résultats de recherche - hover effect */
         .hover-card {
-            border: 2px solid #e8eaed !important;
-            border-radius: 12px !important;
+            border: 1px solid #e8eaed !important;
+            border-radius: 8px !important;
             overflow: hidden;
             transition: all 0.3s ease;
             background: white;
         }
         
         .hover-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 24px rgba(91, 122, 158, 0.15) !important;
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(91, 122, 158, 0.12) !important;
             border-color: #5b7a9e !important;
         }
         
         .hover-card a {
             color: inherit;
             text-decoration: none;
+            display: block;
         }
         
         .hover-card .card-footer {
             transition: all 0.3s ease;
-            background-color: white !important;
-            border-top: 1px solid #e8eaed !important;
         }
         
         .hover-card:hover .card-footer {
             background-color: #5b7a9e !important;
-            border-top-color: #5b7a9e !important;
         }
         
         .hover-card:hover .card-footer small {
             color: white !important;
-        }
-        
-        .hover-card .card-body {
-            background: linear-gradient(to bottom, white 0%, #fafbfc 100%);
-        }
-        
-        /* Espacement entre les cartes */
-        .row.g-4 {
-            row-gap: 2rem !important;
-        }
-        
-        /* Badge sur l'image */
-        .hover-card .position-absolute.badge {
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         /* Dropdown touch-friendly */

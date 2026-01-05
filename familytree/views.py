@@ -282,11 +282,37 @@ def home(request):
     people = None
     
     if search_query:
+        # Recherche avancée avec PostgreSQL (unaccent pour ignorer les accents)
+        from django.contrib.postgres.search import TrigramSimilarity
+        from django.db.models import Q, F
+        
+        # Recherche exacte d'abord (insensible à la casse et aux accents)
         people = Person.objects.filter(
-            models.Q(first_name__icontains=search_query) |
-            models.Q(last_name__icontains=search_query) |
-            models.Q(gramps_id__icontains=search_query)
-        ).order_by('last_name', 'first_name')
+            Q(first_name__unaccent__icontains=search_query) |
+            Q(last_name__unaccent__icontains=search_query) |
+            Q(gramps_id__icontains=search_query)
+        )
+        
+        # Si peu de résultats, ajouter recherche par similarité (pour les fautes de frappe)
+        if people.count() < 5:
+            similar_people = Person.objects.annotate(
+                similarity=(
+                    TrigramSimilarity('first_name', search_query) +
+                    TrigramSimilarity('last_name', search_query)
+                )
+            ).filter(similarity__gt=0.3).order_by('-similarity')
+            
+            # Combiner les résultats (union)
+            people = (people | similar_people).distinct()
+        
+        # Trier par pertinence
+        people = people.order_by('last_name', 'first_name')
+        
+        # DEBUG: afficher le nombre de résultats
+        print(f"DEBUG: Recherche '{search_query}' - {people.count()} résultats trouvés")
+        if people.count() > 0:
+            for p in people[:5]:  # Afficher les 5 premiers
+                print(f"  - {p.first_name} {p.last_name} (ID: {p.gramps_id})")
         
         # Pagination
         paginator = Paginator(people, 25)  # 25 résultats par page
