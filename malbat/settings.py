@@ -116,7 +116,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME', 'malbat_db'),
         'USER': os.getenv('DB_USER', 'malbat_user'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'pkzG+VWJuJFNASX2fmJ12+iA/H8JHgXcI7puqNHCHig'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'Pass123'),
         'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': os.getenv('DB_PORT', '5432'),
     }
