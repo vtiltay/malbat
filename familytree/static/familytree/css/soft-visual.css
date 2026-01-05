@@ -1,0 +1,463 @@
+/* ============================================
+   MALBAT.ORG - SOFT VISUAL ENHANCEMENTS
+   Améliorations visuelles douces et élégantes
+   ============================================ */
+
+/* ============================================
+   1. TYPOGRAPHIE RAFFINÉE
+   ============================================ */
+
+body {
+    color: #4a5259;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #2d3338;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.display-5 {
+    font-weight: 600;
+    color: #2d3338;
+}
+
+/* ============================================
+   2. ESPACEMENT HARMONIEUX
+   ============================================ */
+
+section {
+    margin-bottom: 3rem;
+}
+
+@media (max-width: 767.98px) {
+    section {
+        margin-bottom: 2rem;
+    }
+}
+
+/* ============================================
+   3. CARTES - DESIGN ÉPURÉ
+   ============================================ */
+
+.card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Enlever les arrondis trop prononcés */
+.card,
+.btn,
+.form-control,
+.badge,
+.alert {
+    border-radius: 8px;
+}
+
+/* ============================================
+   4. IMAGES - TRANSITIONS DOUCES
+   ============================================ */
+
+img {
+    transition: opacity 0.3s ease;
+}
+
+.card img {
+    filter: saturate(0.9) brightness(1.02);
+}
+
+/* ============================================
+   5. HOVER STATES SUBTILS
+   ============================================ */
+
+.card a:hover .rounded-circle {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   6. BADGES PLUS DOUX
+   ============================================ */
+
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 0.5em 0.9em;
+}
+
+/* ============================================
+   7. SÉPARATEURS DISCRETS
+   ============================================ */
+
+hr {
+    border-top: 1px solid #e8eaed;
+    opacity: 1;
+    margin: 2.5rem 0;
+}
+
+@media (max-width: 767.98px) {
+    hr {
+        margin: 1.5rem 0;
+    }
+}
+
+/* ============================================
+   8. INPUTS - STYLE MINIMAL
+   ============================================ */
+
+.form-control {
+    background-color: #fafbfc;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    background-color: white;
+}
+
+/* ============================================
+   9. NAVBAR - TRÈS PROPRE
+   ============================================ */
+
+.navbar {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* ============================================
+   10. STATISTIQUES - MINIMALISTES
+   ============================================ */
+
+.card.text-center {
+    border: none;
+    background-color: #fafbfc;
+}
+
+.card.text-center:hover {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================
+   11. BUTTONS - ÉTAT DISABLED DOUX
+   ============================================ */
+
+.btn:disabled,
+.btn.disabled {
+    opacity: 0.4;
+    filter: grayscale(0.3);
+}
+
+/* ============================================
+   12. CHEVRONS - PLUS SUBTILS
+   ============================================ */
+
+.bi-chevron-right {
+    opacity: 0.3;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.card a:hover .bi-chevron-right {
+    opacity: 0.6;
+    transform: translateX(2px);
+}
+
+/* ============================================
+   13. ICÔNES - PLUS DOUCES
+   ============================================ */
+
+.bi {
+    vertical-align: -0.125em;
+}
+
+/* ============================================
+   14. PROFILE HEADER - GRADIENT SUBTIL
+   ============================================ */
+
+.card.shadow-lg .ratio.ratio-1x1 {
+    background: linear-gradient(135deg, #f4f5f7 0%, #e8eaed 100%);
+}
+
+/* ============================================
+   15. FEATURE CARDS - BACKGROUND SUBTIL
+   ============================================ */
+
+.card.shadow-sm {
+    background: linear-gradient(180deg, white 0%, #fafbfc 100%);
+}
+
+/* ============================================
+   16. DROPDOWNS - PLUS ÉLÉGANTS
+   ============================================ */
+
+.dropdown-menu {
+    border: none;
+    padding: 0.5rem;
+}
+
+.dropdown-item {
+    border-radius: 6px;
+    margin-bottom: 0.125rem;
+}
+
+.dropdown-item:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   17. PAGINATION - DESIGN ÉPURÉ
+   ============================================ */
+
+.pagination {
+    gap: 0.25rem;
+}
+
+.page-link {
+    border: none;
+    background-color: #fafbfc;
+}
+
+.page-link:hover {
+    background-color: #f4f5f7;
+}
+
+.page-item.active .page-link {
+    box-shadow: 0 1px 3px rgba(91, 122, 158, 0.2);
+}
+
+/* ============================================
+   18. TABLES - LIGNES SUBTILES
+   ============================================ */
+
+.table tbody tr {
+    border-bottom: 1px solid #f4f5f7;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* ============================================
+   19. ALERTS - PLUS DOUX
+   ============================================ */
+
+.alert {
+    border-left: 3px solid;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.alert-success {
+    border-left-color: #6b9d7f;
+}
+
+.alert-warning {
+    border-left-color: #b8956a;
+}
+
+.alert-danger,
+.alert-error {
+    border-left-color: #b87d7d;
+}
+
+.alert-info {
+    border-left-color: #7d9bb8;
+}
+
+/* ============================================
+   20. NOTES SECTION - FOND DOUX
+   ============================================ */
+
+.card .card-body p {
+    color: #4a5259;
+    line-height: 1.7;
+}
+
+/* ============================================
+   21. SEARCH SECTION - MINIMAL
+   ============================================ */
+
+.card.border-0.shadow-sm {
+    background: linear-gradient(135deg, white 0%, #fafbfc 100%);
+}
+
+/* ============================================
+   22. COPY BUTTON - TRÈS DISCRET
+   ============================================ */
+
+.copy-id-btn {
+    opacity: 0.5;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.copy-id-btn:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* ============================================
+   23. CODE BLOCKS - STYLE DOUX
+   ============================================ */
+
+code {
+    font-size: 0.9em;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+/* ============================================
+   24. AVATAR BORDERS - TRÈS FINS
+   ============================================ */
+
+.rounded-circle {
+    border-width: 2px !important;
+}
+
+/* ============================================
+   25. LOADING STATES - ANIMATION DOUCE
+   ============================================ */
+
+@keyframes pulse-soft {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.loading {
+    animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* ============================================
+   26. HERO EMOJI - PLUS SUBTIL
+   ============================================ */
+
+.display-1 {
+    filter: grayscale(0.1);
+}
+
+/* ============================================
+   27. CARD HEADERS - LÉGER GRADIENT
+   ============================================ */
+
+.card-header {
+    background: linear-gradient(180deg, #fafbfc 0%, #f4f5f7 100%);
+    font-weight: 500;
+}
+
+/* ============================================
+   28. ACTION SECTION - BACKGROUND TRÈS DOUX
+   ============================================ */
+
+.card.bg-light {
+    background: linear-gradient(135deg, #fafbfc 0%, #f4f5f7 100%) !important;
+    border: 1px solid #e8eaed;
+}
+
+/* ============================================
+   29. FOCUS VISIBLE - POUR ACCESSIBILITÉ
+   ============================================ */
+
+.btn:focus-visible,
+.form-control:focus-visible,
+a:focus-visible {
+    outline: 2px solid #5b7a9e;
+    outline-offset: 2px;
+}
+
+/* ============================================
+   30. TRANSITIONS GLOBALES DOUCES
+   ============================================ */
+
+* {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   31. TEXT SELECTION - COULEUR SUBTILE
+   ============================================ */
+
+::selection {
+    background-color: rgba(91, 122, 158, 0.2);
+    color: inherit;
+}
+
+::-moz-selection {
+    background-color: rgba(91, 122, 158, 0.2);
+    color: inherit;
+}
+
+/* ============================================
+   32. SCROLLBAR - STYLE MINIMAL (WebKit)
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f4f5f7;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c4c9d0;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9fa6b2;
+}
+
+/* ============================================
+   33. PLACEHOLDER TEXT - PLUS DOUX
+   ============================================ */
+
+::placeholder {
+    color: #9fa6b2;
+    opacity: 1;
+}
+
+:-ms-input-placeholder {
+    color: #9fa6b2;
+}
+
+::-ms-input-placeholder {
+    color: #9fa6b2;
+}
+
+/* ============================================
+   34. DARK MODE SUPPORT (optionnel)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    /* On garde le thème clair car c'est plus élégant 
+       pour un arbre généalogique */
+}
+
+/* ============================================
+   35. PRINT - TRÈS PROPRE
+   ============================================ */
+
+@media print {
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    
+    .card {
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    
+    body {
+        background: white;
+    }
+}

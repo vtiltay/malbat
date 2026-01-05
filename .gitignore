@@ -49,6 +49,9 @@ db.sqlite3-journal
 *~
 .DS_Store
 
+# Documentation personnelle
+GITHUB_COMMANDS.md
+
 # OS
 Thumbs.db
 .env.*.local

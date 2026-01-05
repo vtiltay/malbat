@@ -77,6 +77,18 @@ class Person(models.Model):
     def gramps_id_numeric(self):
         """Extrait la partie numérique de l'identifiant Gramps (ex: I0001 -> 1)"""
         return int(self.gramps_id[1:])
+    
+    def get_parents(self):
+        """Retourne la liste des parents (père et mère) de cette personne"""
+        parents = []
+        # Chercher les familles où cette personne est un enfant
+        families = Family.objects.filter(children=self)
+        for family in families:
+            if family.father:
+                parents.append(family.father)
+            if family.mother:
+                parents.append(family.mother)
+        return parents
 
 class Family(models.Model):
     """

@@ -36,53 +36,95 @@
         </h4>
         
         {% if people %}
-        <div class="table-responsive">
-            <table class="table table-hover shadow-sm">
-                <thead class="table-light">
-                    <tr>
-                        <th>{% trans "ID" %}</th>
-                        <th>{% trans "First Name" %}</th>
-                        <th>{% trans "Last Name" %}</th>
-                        <th>{% trans "Gender" %}</th>
-                        <th>{% trans "Birth" %}</th>
-                        <th>{% trans "Death" %}</th>
-                        <th>{% trans "Actions" %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for person in people %}
-                    <tr>
-                        <td><code>{{ person.gramps_id }}</code></td>
-                        <td>{{ person.first_name }}</td>
-                        <td><strong>{{ person.last_name }}</strong></td>
-                        <td>
-                            {% if person.gender == 'M' %}
-                                <span class="badge bg-info">👨 {% trans "Male" %}</span>
-                            {% elif person.gender == 'F' %}
-                                <span class="badge bg-danger">👩 {% trans "Female" %}</span>
-                            {% else %}
-                                <span class="badge bg-secondary">❓ {% trans "Unknown" %}</span>
+        <!-- Cartes de résultats -->
+        <div class="row g-4 mb-4">
+            {% for person in people %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 shadow hover-card">
+                    <a href="{% url 'person_detail' person.gramps_id_numeric %}" class="text-decoration-none">
+                        <!-- Avatar / Photo -->
+                        <div class="ratio ratio-1x1 bg-primary position-relative">
+                            <div class="d-flex align-items-center justify-content-center text-white">
+                                {% if person.gender == 'M' %}
+                                    <div class="display-4">👨</div>
+                                {% elif person.gender == 'F' %}
+                                    <div class="display-4">👩</div>
+                                {% else %}
+                                    <div class="display-4">👤</div>
+                                {% endif %}
+                            </div>
+                            <!-- Badge genre en haut à droite -->
+                            <div class="position-absolute top-0 end-0 m-2">
+                                {% if person.gender == 'M' %}
+                                    <span class="badge bg-info">👨</span>
+                                {% elif person.gender == 'F' %}
+                                    <span class="badge bg-danger">👩</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">❓</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Info -->
+                        <div class="card-body">
+                            <h5 class="card-title text-dark mb-3 fw-bold">{{ person.first_name }}<br>{{ person.last_name }}</h5>
+                            
+                            <!-- Parents -->
+                            {% with parents=person.get_parents %}
+                            {% if parents %}
+                            <div class="mb-3 pb-3 border-bottom">
+                                <div class="small text-muted mb-1">
+                                    <i class="bi bi-people-fill"></i> <strong>{% trans "Parents" %}:</strong>
+                                </div>
+                                <div class="small text-secondary">
+                                    {% for parent in parents %}
+                                        {{ parent.first_name }} {{ parent.last_name }}{% if not forloop.last %}<br>{% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
                             {% endif %}
-                        </td>
-                        <td>{{ person.birth_date|date:"d/m/Y"|default:"-" }}</td>
-                        <td>
-                            {% if person.death_date %}
-                                {{ person.death_date|date:"d/m/Y" }}
-                            {% elif person.is_deceased %}
-                                <span class="text-muted">{% trans "Deceased" %}</span>
-                            {% else %}
-                                <span class="text-success">{% trans "Living" %}</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{% url 'person_detail' person.gramps_id_numeric %}" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-eye"></i> {% trans "View" %}
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            {% endwith %}
+                            
+                            <!-- Gramps ID -->
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <i class="bi bi-tag-fill"></i> <code class="bg-light px-2 py-1 rounded">{{ person.gramps_id }}</code>
+                                </small>
+                            </div>
+                            
+                            <!-- Dates -->
+                            <div class="small">
+                                {% if person.birth_date %}
+                                    <div class="mb-1 text-muted">
+                                        <i class="bi bi-calendar-event"></i> {{ person.birth_date|date:"d/m/Y" }}
+                                    </div>
+                                {% endif %}
+                                {% if person.death_date %}
+                                    <div class="mb-1 text-muted">
+                                        <i class="bi bi-calendar-x"></i> {{ person.death_date|date:"d/m/Y" }}
+                                    </div>
+                                {% elif person.is_deceased %}
+                                    <div class="mb-1 text-muted">
+                                        <i class="bi bi-calendar-x"></i> {% trans "Deceased" %}
+                                    </div>
+                                {% else %}
+                                    <div class="mb-1">
+                                        <span class="badge bg-success"><i class="bi bi-heart-fill"></i> {% trans "Living" %}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div class="card-footer bg-white border-top text-center">
+                            <small class="text-primary fw-bold">
+                                <i class="bi bi-eye-fill"></i> {% trans "View Profile" %}
+                            </small>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         
         <!-- Pagination -->

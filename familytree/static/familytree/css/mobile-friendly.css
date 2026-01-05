@@ -1,0 +1,653 @@
+/* ============================================
+   MALBAT.ORG - MOBILE-FRIENDLY STYLES
+   Optimized for touch interactions
+   ============================================ */
+
+/* ============================================
+   1. GLOBAL TOUCH-FRIENDLY SETTINGS
+   ============================================ */
+
+/* Minimum touch target size (44x44px recommended by Apple/Google) */
+:root {
+    --touch-target-min: 48px;
+    --spacing-touch: 16px;
+    --border-radius-mobile: 12px;
+}
+
+/* Improved tap highlighting */
+* {
+    -webkit-tap-highlight-color: rgba(13, 110, 253, 0.1);
+}
+
+/* Better text rendering on mobile */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   2. NAVIGATION BAR - MOBILE OPTIMIZED
+   ============================================ */
+
+/* Larger navbar for easier tapping */
+.navbar {
+    padding: 1rem 0;
+    min-height: 64px;
+}
+
+.navbar-brand {
+    font-size: 1.25rem;
+    padding: 0.75rem 0;
+}
+
+/* Hamburger button - larger touch target */
+.navbar-toggler {
+    padding: 0.75rem;
+    border-width: 2px;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+}
+
+.navbar-toggler-icon {
+    width: 28px;
+    height: 28px;
+}
+
+/* Nav links - larger touch areas */
+.navbar-nav .nav-link {
+    padding: 1rem 1.25rem;
+    font-size: 1.05rem;
+    min-height: var(--touch-target-min);
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-link i {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+}
+
+/* Dropdown touch-friendly */
+.dropdown-menu {
+    min-width: 200px;
+    border-radius: var(--border-radius-mobile);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item {
+    padding: 0.875rem 1.25rem;
+    font-size: 1rem;
+    min-height: var(--touch-target-min);
+}
+
+/* ============================================
+   3. BUTTONS - TOUCH OPTIMIZED
+   ============================================ */
+
+/* All buttons get larger touch targets */
+.btn {
+    min-height: var(--touch-target-min);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: var(--border-radius-mobile);
+    font-weight: 500;
+}
+
+.btn i {
+    font-size: 1.2rem;
+}
+
+.btn-sm {
+    min-height: 42px;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.95rem;
+}
+
+.btn-lg {
+    min-height: 56px;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}
+
+/* Button groups spacing */
+.btn-group .btn,
+.btn-toolbar .btn {
+    margin: 4px;
+}
+
+/* ============================================
+   4. FORMS - MOBILE INPUT OPTIMIZATION
+   ============================================ */
+
+/* Larger form controls */
+.form-control,
+.form-select {
+    min-height: var(--touch-target-min);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: var(--border-radius-mobile);
+    border-width: 2px;
+}
+
+.form-control-lg {
+    min-height: 56px;
+    padding: 1rem 1.25rem;
+    font-size: 1.125rem;
+}
+
+/* Better focus states for accessibility */
+.form-control:focus,
+.form-select:focus {
+    border-width: 2px;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+/* Form labels more readable */
+.form-label {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.625rem;
+}
+
+/* Checkbox and radio - larger touch targets */
+.form-check {
+    min-height: var(--touch-target-min);
+    padding-left: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    width: 24px;
+    height: 24px;
+    margin-top: 0;
+    margin-left: -2rem;
+}
+
+.form-check-label {
+    padding-left: 0.5rem;
+    font-size: 1rem;
+}
+
+/* ============================================
+   5. CARDS - IMPROVED TOUCH INTERACTION
+   ============================================ */
+
+.card {
+    border-radius: var(--border-radius-mobile);
+    margin-bottom: 1rem;
+}
+
+/* Card links - full card clickable with better feedback */
+.card a.text-decoration-none {
+    display: block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card a.text-decoration-none:active {
+    transform: scale(0.98);
+}
+
+.card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Card headers more prominent */
+.card-header {
+    padding: 1rem 1.25rem;
+    font-size: 1.05rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* ============================================
+   6. SEARCH BAR - OPTIMIZED FOR MOBILE
+   ============================================ */
+
+/* Search section improvements */
+.card .form-control-lg {
+    font-size: 1.125rem;
+    border-radius: var(--border-radius-mobile);
+}
+
+/* Search button full width on small screens */
+@media (max-width: 767.98px) {
+    .card form .btn-primary {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+}
+
+/* ============================================
+   7. TABLES - TOUCH-FRIENDLY
+   ============================================ */
+
+.table {
+    font-size: 0.95rem;
+}
+
+.table td,
+.table th {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+}
+
+/* Table buttons */
+.table .btn {
+    white-space: nowrap;
+}
+
+/* Responsive table improvements */
+@media (max-width: 767.98px) {
+    .table-responsive {
+        border-radius: var(--border-radius-mobile);
+        margin-bottom: 1rem;
+    }
+    
+    .table {
+        font-size: 0.875rem;
+    }
+    
+    .table td,
+    .table th {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+/* ============================================
+   8. PERSON CARDS - FAMILY TREE SPECIFIC
+   ============================================ */
+
+/* Family member cards */
+.card a[href*="person_detail"] {
+    min-height: 72px;
+    padding: 1rem;
+}
+
+/* Avatar circles - larger on mobile */
+.rounded-circle {
+    transition: transform 0.2s ease;
+}
+
+.card a:active .rounded-circle {
+    transform: scale(0.95);
+}
+
+/* Person profile images */
+.ratio.ratio-1x1 {
+    border-radius: var(--border-radius-mobile) var(--border-radius-mobile) 0 0;
+}
+
+/* Profile header improvements for mobile */
+@media (max-width: 767.98px) {
+    .display-5 {
+        font-size: 1.75rem;
+    }
+    
+    .card-body.p-md-5 {
+        padding: 1.5rem !important;
+    }
+}
+
+/* ============================================
+   9. LISTS - FAMILY MEMBERS
+   ============================================ */
+
+/* Person list items - better spacing */
+.list-group-item,
+.card-body a.d-flex {
+    min-height: 72px;
+    padding: 1rem 1.25rem;
+}
+
+/* Icon spacing in lists */
+.d-flex .bi {
+    font-size: 1.25rem;
+}
+
+/* Chevron indicators */
+.bi-chevron-right {
+    font-size: 1.25rem;
+    opacity: 0.5;
+}
+
+/* ============================================
+   10. STATISTICS CARDS
+   ============================================ */
+
+.card.text-center .card-body {
+    padding: 1.5rem 1rem;
+}
+
+.card.text-center .card-title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card.text-center .card-text {
+    font-size: 1rem;
+}
+
+/* ============================================
+   11. BADGES & TAGS
+   ============================================ */
+
+.badge {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* ============================================
+   12. PAGINATION - TOUCH FRIENDLY
+   ============================================ */
+
+.pagination {
+    margin-top: 2rem;
+}
+
+.page-link {
+    min-height: var(--touch-target-min);
+    min-width: var(--touch-target-min);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-mobile);
+    margin: 0 0.25rem;
+}
+
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+    border-radius: var(--border-radius-mobile);
+}
+
+/* ============================================
+   13. ALERTS & MESSAGES
+   ============================================ */
+
+.alert {
+    padding: 1rem 1.25rem;
+    border-radius: var(--border-radius-mobile);
+    font-size: 1rem;
+}
+
+.alert i {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+}
+
+.alert .btn-close {
+    padding: 0.75rem;
+}
+
+/* ============================================
+   14. MODALS (if used)
+   ============================================ */
+
+.modal-header {
+    padding: 1.25rem 1.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1.25rem 1.5rem;
+}
+
+.modal-footer .btn {
+    min-width: 120px;
+}
+
+/* ============================================
+   15. COPY ID BUTTON
+   ============================================ */
+
+.copy-id-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================
+   16. ACTION SECTIONS
+   ============================================ */
+
+/* Propose modification buttons */
+.card .row.g-2 .col-sm-6,
+.card .row.g-2 .col-md-4 {
+    padding: 0.375rem;
+}
+
+.card .row.g-2 .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ============================================
+   17. TOASTS & NOTIFICATIONS
+   ============================================ */
+
+.toast {
+    min-width: 300px;
+    font-size: 1rem;
+}
+
+.toast-body {
+    padding: 1rem 1.25rem;
+}
+
+/* ============================================
+   18. MOBILE-SPECIFIC IMPROVEMENTS
+   ============================================ */
+
+@media (max-width: 575.98px) {
+    /* Reduce padding on small screens */
+    .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    /* Stack buttons vertically with good spacing */
+    .d-flex.gap-2,
+    .d-flex.gap-3 {
+        flex-direction: column;
+        gap: 0.75rem !important;
+    }
+    
+    .d-flex.gap-2 .btn,
+    .d-flex.gap-3 .btn {
+        width: 100%;
+    }
+    
+    /* Hero section adjustments */
+    h1 {
+        font-size: 1.75rem;
+    }
+    
+    .lead {
+        font-size: 1.125rem;
+    }
+    
+    /* Feature cards full width on mobile */
+    .row.g-4 > [class*="col-"] {
+        margin-bottom: 1rem;
+    }
+}
+
+/* ============================================
+   19. LANDSCAPE MOBILE OPTIMIZATION
+   ============================================ */
+
+@media (max-width: 767.98px) and (orientation: landscape) {
+    /* Reduce vertical padding in landscape */
+    .py-4,
+    .py-md-5 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+    
+    .navbar {
+        padding: 0.5rem 0;
+        min-height: 56px;
+    }
+}
+
+/* ============================================
+   20. TABLET OPTIMIZATION
+   ============================================ */
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    /* Optimal spacing for tablets */
+    .btn {
+        min-height: 44px;
+    }
+    
+    .form-control {
+        min-height: 44px;
+    }
+}
+
+/* ============================================
+   21. IMPROVED ACTIVE STATES
+   ============================================ */
+
+/* Better visual feedback for touch */
+.btn:active,
+.btn.active {
+    transform: scale(0.97);
+}
+
+.nav-link:active {
+    opacity: 0.7;
+}
+
+.card:active {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================
+   22. ACCESSIBILITY - HIGH CONTRAST MODE
+   ============================================ */
+
+@media (prefers-contrast: high) {
+    .btn {
+        border-width: 2px;
+    }
+    
+    .form-control {
+        border-width: 2px;
+    }
+    
+    .card {
+        border-width: 2px;
+    }
+}
+
+/* ============================================
+   23. SAFE AREA INSETS (iPhone X+)
+   ============================================ */
+
+@supports (padding: max(0px)) {
+    .navbar {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+    
+    .container-fluid {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+}
+
+/* ============================================
+   24. SMOOTH SCROLLING
+   ============================================ */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ============================================
+   25. IMPROVED CARD INTERACTIONS
+   ============================================ */
+
+/* Person detail links get better press feedback */
+a[href*="person_detail"] {
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+a[href*="person_detail"]:active {
+    background-color: rgba(0, 0, 0, 0.02);
+    transform: scale(0.99);
+}
+
+/* ============================================
+   26. LANGUAGE SWITCHER
+   ============================================ */
+
+#languageDropdown {
+    min-height: var(--touch-target-min);
+    padding: 0.75rem 1rem;
+}
+
+/* ============================================
+   27. GRID IMPROVEMENTS FOR MOBILE
+   ============================================ */
+
+@media (max-width: 575.98px) {
+    /* Force single column on very small screens */
+    .row > [class*="col-sm"] {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* ============================================
+   28. OPTIMIZE IMAGES FOR TOUCH
+   ============================================ */
+
+img {
+    -webkit-touch-callout: none;
+    user-select: none;
+}
+
+/* Profile images in cards */
+.card img {
+    pointer-events: none;
+}
+
+/* ============================================
+   29. BOTTOM NAVIGATION SAFE AREA
+   ============================================ */
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    body {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* ============================================
+   30. PRINT OPTIMIZATION
+   ============================================ */
+
+@media print {
+    .navbar,
+    .btn,
+    .alert .btn-close {
+        display: none;
+    }
+    
+    .card {
+        break-inside: avoid;
+    }
+}
