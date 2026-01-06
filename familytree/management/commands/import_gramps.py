@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 import gzip
 import tarfile
 import os
+import shutil
 import tempfile
 from datetime import datetime, date
 from pathlib import Path
@@ -27,18 +28,22 @@ class Command(BaseCommand):
 
         if not os.path.exists(file_path):
             raise CommandError(f'File "{file_path}" does not exist')
+        
+        # Store file path for media handling
+        self.current_file_path = file_path
 
-        self.stdout.write(f'Starting import from: {file_path}')
+        self.stdout.write(f'Starting incremental import from: {file_path}')
 
-        # Clear existing data
-        self.stdout.write('Clearing existing data...')
-        Person.objects.all().delete()
-        Family.objects.all().delete()
-        Event.objects.all().delete()
-        Place.objects.all().delete()
-        Note.objects.all().delete()
-        Media.objects.all().delete()
-        FamilyChild.objects.all().delete()
+        # INCREMENTAL IMPORT - No data deletion
+        # This preserves existing ProposedModification links and other manual changes
+        # self.stdout.write('Clearing existing data...')
+        # Person.objects.all().delete()
+        # Family.objects.all().delete()
+        # Event.objects.all().delete()
+        # Place.objects.all().delete()
+        # Note.objects.all().delete()
+        # Media.objects.all().delete()
+        # FamilyChild.objects.all().delete()
 
         # Extract and parse the file
         self.stdout.write('Parsing XML data...')
@@ -307,100 +312,90 @@ class Command(BaseCommand):
                 shutil.rmtree(temp_dir)
 
     def _import_places(self, places):
-        """Import places into the database using bulk_create"""
-        place_objects = [
-            Place(
+        """Import places into the database using update_or_create for incremental updates"""
+        for place_data in places.values():
+            place, created = Place.objects.update_or_create(
                 gramps_id=place_data['id'],
-                name=place_data['name']
+                defaults={'name': place_data['name']}
             )
-            for place_data in places.values()
-        ]
-        Place.objects.bulk_create(place_objects, batch_size=100)
+            places[place_data['id']] = place
+            if created:
+                self.stdout.write(f'Created place: {place.name}')
+            else:
+                self.stdout.write(f'Updated place: {place.name}')
 
     def _import_people(self, people):
-        """Import people into the database using bulk_create"""
-        people_objects = []
-        for person_handle, person_data in people.items():
+        """Import people into the database using update_or_create for incremental updates"""
+        for person_handle, person_data in list(people.items()):
             person_id = person_data['id'] or person_handle
             first_name = person_data['first_name']
             last_name = person_data['last_name']
             gender = person_data['gender']
             gramps_last_updated = person_data.get('gramps_last_updated')
             
-            person = Person(
+            person, created = Person.objects.update_or_create(
                 gramps_id=person_id,
-                first_name=first_name,
-                last_name=last_name,
-                gender=gender,
-                gramps_last_updated=gramps_last_updated
+                defaults={
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'gender': gender,
+                    'gramps_last_updated': gramps_last_updated
+                }
             )
-            people_objects.append(person)
-        
-        # Bulk create all people at once
-        created_people = Person.objects.bulk_create(people_objects, batch_size=500)
-        
-        # Create a mapping of gramps_id to Person object for later use
-        gramps_id_map = {p.gramps_id: p for p in created_people}
-        
-        # Update the people dict with model instances
-        for person_handle, person_data in list(people.items()):
-            person_id = person_data['id'] or person_handle
-            if person_id in gramps_id_map:
-                people[person_handle] = gramps_id_map[person_id]
+            
+            # Update the people dict with the model instance
+            people[person_handle] = person
+            
+            if created:
+                self.stdout.write(f'Created person: {person.first_name} {person.last_name}')
+            else:
+                self.stdout.write(f'Updated person: {person.first_name} {person.last_name}')
 
     def _import_families(self, families, people):
-        """Import families into the database with ordered children from Gramps"""
-        family_objects = []
-        family_children = []  # Store children to add later in bulk
-        
+        """Import families into the database using update_or_create for incremental updates"""
         for family_handle, family_elem in families.items():
             family_id = family_elem.get('id')
             if not family_id:
                 continue
+            
             father_elem = family_elem.find(f'{{{GRAMPS_NS}}}father')
             father = people.get(father_elem.get('hlink')) if father_elem is not None else None
             mother_elem = family_elem.find(f'{{{GRAMPS_NS}}}mother')
             mother = people.get(mother_elem.get('hlink')) if mother_elem is not None else None
 
-            family = Family(
+            family, created = Family.objects.update_or_create(
                 gramps_id=family_id,
-                father=father,
-                mother=mother
+                defaults={
+                    'father': father,
+                    'mother': mother
+                }
             )
-            family_objects.append((family, family_handle, family_elem))
-        
-        # Bulk create all families
-        created_families = Family.objects.bulk_create([f[0] for f in family_objects], batch_size=100)
-        
-        # Create mapping for families
-        family_map = {}
-        for idx, (family, family_handle, family_elem) in enumerate(family_objects):
-            if idx < len(created_families):
-                family_map[family_handle] = created_families[idx]
-                families[family_handle] = created_families[idx]
-                
-                # Collect children
-                for order, child_elem in enumerate(family_elem.findall(f'{{{GRAMPS_NS}}}childref')):
-                    child_handle = child_elem.get('hlink')
-                    if child_handle in people:
-                        family_children.append(
-                            FamilyChild(
-                                family=created_families[idx],
-                                child=people[child_handle],
-                                order=order
-                            )
-                        )
-        
-        # Bulk create all family children
-        if family_children:
-            FamilyChild.objects.bulk_create(family_children, batch_size=500)
+            
+            families[family_handle] = family
+            
+            if created:
+                self.stdout.write(f'Created family: {family.gramps_id}')
+            else:
+                self.stdout.write(f'Updated family: {family.gramps_id}')
+            
+            # Update children - remove existing and recreate to maintain order
+            FamilyChild.objects.filter(family=family).delete()
+            
+            # Add children with their order from Gramps
+            for order, child_elem in enumerate(family_elem.findall(f'{{{GRAMPS_NS}}}childref')):
+                child_handle = child_elem.get('hlink')
+                if child_handle in people:
+                    FamilyChild.objects.create(
+                        family=family,
+                        child=people[child_handle],
+                        order=order
+                    )
 
     def _import_events(self, events, people, places, people_event_refs):
-        """Import events into the database using bulk_create"""
-        # First create all events
-        event_objects = []
-        event_handle_map = {}
+        """Import events into the database using update_or_create for incremental updates"""
+        event_handle_to_obj = {}
         
+        # Create/update all events
         for event_handle, event_data in events.items():
             event_id = event_data['id']
             if not event_id:
@@ -408,31 +403,27 @@ class Command(BaseCommand):
             
             place = places.get(event_data['place_hlink']) if event_data['place_hlink'] else None
             
-            event = Event(
+            # Initially create without person association
+            event, created = Event.objects.update_or_create(
                 gramps_id=event_id,
-                type=event_data['type'],
-                date=event_data['date'],
-                place=place,
-                description=event_data['description'],
-                person=None,
-                family=None
+                defaults={
+                    'type': event_data['type'],
+                    'date': event_data['date'],
+                    'place': place,
+                    'description': event_data['description']
+                    # person and family will be updated separately
+                }
             )
-            event_objects.append(event)
-            event_handle_map[len(event_objects) - 1] = event_handle
+            
+            event_handle_to_obj[event_handle] = event
+            events[event_handle] = event
+            
+            if created:
+                self.stdout.write(f'Created event: {event.type} ({event.gramps_id})')
+            else:
+                self.stdout.write(f'Updated event: {event.type} ({event.gramps_id})')
         
-        # Bulk create all events
-        created_events = Event.objects.bulk_create(event_objects, batch_size=500)
-        
-        # Create a mapping of event_handle to Event object
-        event_handle_to_obj = {}
-        for idx, event in enumerate(created_events):
-            event_handle = event_handle_map.get(idx)
-            if event_handle:
-                event_handle_to_obj[event_handle] = event
-                events[event_handle] = event
-        
-        # Now associate events with persons based on event_refs - batch the updates
-        events_to_update = []
+        # Now associate events with persons based on event_refs
         for person_handle, event_refs in people_event_refs.items():
             if person_handle in people:
                 person_obj = people[person_handle]
@@ -440,60 +431,45 @@ class Command(BaseCommand):
                     event_handle = event_ref['hlink']
                     if event_handle in event_handle_to_obj:
                         event_obj = event_handle_to_obj[event_handle]
-                        if event_obj.person is None:
+                        if event_obj.person != person_obj:
                             event_obj.person = person_obj
-                            events_to_update.append(event_obj)
-        
-        # Bulk update events with person associations
-        if events_to_update:
-            Event.objects.bulk_update(events_to_update, ['person'], batch_size=500)
+                            event_obj.save(update_fields=['person'])
 
     def _import_notes(self, notes):
-        """Import notes into the database using bulk_create"""
-        note_objects = []
-        note_handle_map = {}
-        
-        for note_handle, note_elem in notes.items():
+        """Import notes into the database using update_or_create for incremental updates"""
+        for note_handle, note_elem in list(notes.items()):
             note_id = note_elem.get('id')
             if not note_id:
                 continue
+            
             text_elem = note_elem.find(f'{{{GRAMPS_NS}}}text')
             text = ''
             if text_elem is not None:
                 text = ''.join(text_elem.itertext()).strip()
             
-            note = Note(
+            note, created = Note.objects.update_or_create(
                 gramps_id=note_id,
-                text=text,
-                person=None,
-                family=None,
-                event=None
+                defaults={'text': text}
+                # person, family, event will be updated in _associate_notes
             )
-            note_objects.append(note)
-            note_handle_map[len(note_objects) - 1] = note_handle
-        
-        # Bulk create all notes
-        created_notes = Note.objects.bulk_create(note_objects, batch_size=500)
-        
-        # Update the notes dict with model instances
-        for idx, note in enumerate(created_notes):
-            note_handle = note_handle_map.get(idx)
-            if note_handle:
-                notes[note_handle] = note
+            
+            notes[note_handle] = note
+            
+            if created:
+                self.stdout.write(f'Created note: {note.gramps_id[:20]}...')
+            else:
+                self.stdout.write(f'Updated note: {note.gramps_id[:20]}...')
 
     def _import_media(self, media, people, people_obj_refs):
-        """Import media into the database and associate with persons using bulk operations"""
-        import shutil
+        """Import media into the database using update_or_create for incremental updates"""
         import os
         from pathlib import Path
         
-        # Get media folder path
-        media_root = BASE_DIR / 'media'
-        media_root.mkdir(exist_ok=True)
+        # Get media folder path - use imported subfolder for consistency
+        media_root = Path(settings.MEDIA_ROOT) / 'imported'
+        media_root.mkdir(exist_ok=True, parents=True)
         
-        # First create all media objects
-        media_objects = []
-        media_handle_map = {}
+        media_handle_to_obj = {}
         
         for media_handle, media_elem in media.items():
             obj_id = media_elem.get('id')
@@ -513,53 +489,76 @@ class Command(BaseCommand):
                 # Extract just the filename from the path
                 filename = os.path.basename(original_file_path)
                 
-                # Check if the file was already extracted to media folder
-                potential_path = media_root / filename
-                if potential_path.exists():
-                    file_path = f'media/{filename}'
-                    self.stdout.write(f'Using extracted media {obj_id}: {filename}')
+                # Try to find and copy the file
+                relative_path = original_file_path
+                dest_path = media_root / filename
+                
+                # Check if file already exists in imported folder
+                if dest_path.exists():
+                    relative_path = f'imported/{filename}'
+                    self.stdout.write(f'Media file already exists: {filename}')
                 else:
-                    # Try to copy file if it exists locally
-                    if original_file_path and os.path.exists(original_file_path):
-                        try:
-                            dest_path = media_root / filename
-                            shutil.copy2(original_file_path, dest_path)
-                            file_path = f'media/{filename}'
-                            self.stdout.write(f'Copied media {obj_id}: {filename}')
-                        except Exception as e:
-                            self.stdout.write(f'Warning: Could not copy {original_file_path}: {e}')
-                            file_path = original_file_path
-                    else:
-                        # File doesn't exist, just store the original path
-                        file_path = original_file_path
-                        self.stdout.write(f'Importing media {obj_id}: {original_file_path} ({mime_type}) [file not found locally]')
+                    # Try to find source file in various locations
+                    possible_sources = [
+                        original_file_path,
+                        os.path.join(BASE_DIR, 'media', filename),
+                        os.path.join(os.path.dirname(self.current_file_path or ''), filename) if hasattr(self, 'current_file_path') else None
+                    ]
+                    
+                    source_found = False
+                    for source_path in possible_sources:
+                        if source_path and os.path.isfile(source_path):
+                            try:
+                                # Handle duplicate filenames
+                                counter = 1
+                                name, ext = os.path.splitext(filename)
+                                final_dest = dest_path
+                                while final_dest.exists():
+                                    filename = f"{name}_{counter}{ext}"
+                                    final_dest = media_root / filename
+                                    counter += 1
+                                
+                                shutil.copy2(source_path, final_dest)
+                                relative_path = f'imported/{filename}'
+                                self.stdout.write(f'Copied media {obj_id}: {filename}')
+                                source_found = True
+                                break
+                            except Exception as e:
+                                self.stdout.write(f'Warning: Could not copy {source_path}: {e}')
+                    
+                    if not source_found:
+                        # File doesn't exist, store original path
+                        relative_path = original_file_path
+                        self.stdout.write(f'Media file not found locally: {original_file_path}')
+                
+                file_path = relative_path
             
             # Extract description from file element attribute
             description = file_elem.get('description', '') if file_elem is not None else ''
 
-            media_obj = Media(
+            media_obj, created = Media.objects.update_or_create(
                 gramps_id=obj_id,
-                file_path=file_path,
-                mime_type=mime_type,
-                description=description
+                defaults={
+                    'file_path': file_path,
+                    'mime_type': mime_type,
+                    'description': description
+                }
             )
-            media_objects.append(media_obj)
-            media_handle_map[len(media_objects) - 1] = media_handle
-        
-        # Bulk create all media objects
-        created_media = Media.objects.bulk_create(media_objects, batch_size=500)
-        
-        # Create mapping and associate with persons
-        media_handle_to_obj = {}
-        for idx, media_obj in enumerate(created_media):
-            media_handle = media_handle_map.get(idx)
-            if media_handle:
-                media_handle_to_obj[media_handle] = media_obj
+            
+            media_handle_to_obj[media_handle] = media_obj
+            
+            if created:
+                self.stdout.write(f'Created media: {obj_id}')
+            else:
+                self.stdout.write(f'Updated media: {obj_id}')
         
         # Now associate media with persons based on obj_refs
         for person_handle, obj_refs in people_obj_refs.items():
             if person_handle in people and obj_refs:
                 person_obj = people[person_handle]
+                # Clear existing media associations for this person
+                person_obj.media.clear()
+                # Add current media associations
                 for obj_hlink in obj_refs:
                     if obj_hlink in media_handle_to_obj:
                         media_obj = media_handle_to_obj[obj_hlink]
@@ -638,9 +637,7 @@ class Command(BaseCommand):
         self.stdout.write(f'Successfully imported {imported_count} loose media files')
 
     def _associate_notes(self, notes, people, families, events, people_note_refs, families_note_refs, events_note_refs):
-        """Associate notes with persons, families, and events using bulk_update"""
-        notes_to_update = []
-        
+        """Associate notes with persons, families, and events using individual updates"""
         # Associate notes with persons
         for person_handle, note_refs in people_note_refs.items():
             if person_handle in people and note_refs:
@@ -648,8 +645,9 @@ class Command(BaseCommand):
                 for note_hlink in note_refs:
                     if note_hlink in notes:
                         note_obj = notes[note_hlink]
-                        note_obj.person = person_obj
-                        notes_to_update.append(note_obj)
+                        if note_obj.person != person_obj:
+                            note_obj.person = person_obj
+                            note_obj.save(update_fields=['person'])
         
         # Associate notes with families
         for family_handle, note_refs in families_note_refs.items():
@@ -658,8 +656,9 @@ class Command(BaseCommand):
                 for note_hlink in note_refs:
                     if note_hlink in notes:
                         note_obj = notes[note_hlink]
-                        note_obj.family = family_obj
-                        notes_to_update.append(note_obj)
+                        if note_obj.family != family_obj:
+                            note_obj.family = family_obj
+                            note_obj.save(update_fields=['family'])
         
         # Associate notes with events
         for event_handle, note_refs in events_note_refs.items():
@@ -668,35 +667,32 @@ class Command(BaseCommand):
                 for note_hlink in note_refs:
                     if note_hlink in notes:
                         note_obj = notes[note_hlink]
-                        note_obj.event = event_obj
-                        notes_to_update.append(note_obj)
-        
-        # Bulk update all notes
-        if notes_to_update:
-            Note.objects.bulk_update(notes_to_update, ['person', 'family', 'event'], batch_size=500)
+                        if note_obj.event != event_obj:
+                            note_obj.event = event_obj
+                            note_obj.save(update_fields=['event'])
 
     def _update_dates(self):
-        """Update persons with birth and death dates from events using bulk_update"""
-        people_to_update = []
+        """Update persons with birth and death dates from events using individual updates"""
+        updated_people = set()
         
         for event in Event.objects.all().select_related('person'):
-            if not event.person:
+            if not event.person or event.person.id in updated_people:
                 continue
-                
+            
+            needs_update = False
+            
             if event.type.lower() == 'birth' and event.date:
-                event.person.birth_date = event.date
-                people_to_update.append(event.person)
+                if event.person.birth_date != event.date:
+                    event.person.birth_date = event.date
+                    needs_update = True
             elif event.type.lower() == 'death':
-                if event.date:
+                if event.date and event.person.death_date != event.date:
                     event.person.death_date = event.date
-                event.person.is_deceased = True
-                people_to_update.append(event.person)
-        
-        # Deduplicate people (in case multiple events for same person)
-        unique_people = {}
-        for person in people_to_update:
-            unique_people[person.id] = person
-        
-        # Bulk update all people
-        if unique_people:
-            Person.objects.bulk_update(list(unique_people.values()), ['birth_date', 'death_date', 'is_deceased'], batch_size=500)
+                    needs_update = True
+                if not event.person.is_deceased:
+                    event.person.is_deceased = True
+                    needs_update = True
+            
+            if needs_update:
+                event.person.save(update_fields=['birth_date', 'death_date', 'is_deceased'])
+                updated_people.add(event.person.id)

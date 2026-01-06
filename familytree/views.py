@@ -7,43 +7,52 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 import xml.etree.ElementTree as ET
 import gzip
 import tarfile
 import os
+import shutil
 import tempfile
 import json
+from pathlib import Path
 from .models import Person, Family, Event, Place, Note, Media, FamilyChild, ProposedModification
 from .forms import RegisterForm, LoginForm, ProposedModificationForm, AddSpouseForm, AddChildForm, DeletePersonForm
+from .utils import (
+    copy_gramps_media_to_django,
+    find_gramps_media_file,
+    normalize_gramps_media_path,
+    ensure_media_directory_permissions
+)
 
 GRAMPS_NS = 'http://gramps-project.org/xml/1.7.2/'  # Namespace for Gramps XML
 ET.register_namespace('', GRAMPS_NS)
 
 
 def import_gramps_data(file_path):
-    # Clear existing data (optional, for fresh import)
-    Person.objects.all().delete()
-    Family.objects.all().delete()
-    Event.objects.all().delete()
-    Place.objects.all().delete()
-    Note.objects.all().delete()
-    Media.objects.all().delete()
-    FamilyChild.objects.all().delete()
-    
+    """
+    Incremental import of Gramps data using update_or_create.
+    Media files are copied to MEDIA_ROOT/imported/ if they exist on the filesystem.
+    """
     # Check if it's a tar.gz containing the gramps file
     gramps_file_path = None
+    extracted_base_dir = None
+    
     with tempfile.TemporaryDirectory() as temp_dir:
         try:
             with gzip.open(file_path, 'rb') as gz_file:
                 with tarfile.open(fileobj=gz_file, mode='r') as tar:
+                    # Extract all files to get both .gramps and media files
+                    tar.extractall(temp_dir)
                     for member in tar.getmembers():
                         if member.name.endswith('.gramps'):
-                            tar.extract(member, temp_dir)
                             gramps_file_path = os.path.join(temp_dir, member.name)
+                            extracted_base_dir = temp_dir
                             break
         except (tarfile.TarError, gzip.BadGzipFile):
             # Not a tar.gz, assume it's the gramps file directly
             gramps_file_path = file_path
+            extracted_base_dir = os.path.dirname(file_path)
         
         if not gramps_file_path:
             raise ValueError("No .gramps file found in the archive")
@@ -60,14 +69,24 @@ def import_gramps_data(file_path):
         people = {}
         families = {}
         
+        # Ensure imported media directory exists
+        imported_media_dir = os.path.join(settings.MEDIA_ROOT, 'imported')
+        os.makedirs(imported_media_dir, exist_ok=True)
+        
         for event, elem in context:
             tag = elem.tag.split('}', 1)[1] if '}' in elem.tag else elem.tag
+            
             if tag == 'placeobj':
                 place_id = elem.get('id')
                 place_name_elem = elem.find(f'{{{GRAMPS_NS}}}ptitle')
                 place_name = place_name_elem.text if place_name_elem is not None and place_name_elem.text else ''
-                place = Place.objects.create(gramps_id=place_id, name=place_name)
+                
+                place, created = Place.objects.update_or_create(
+                    gramps_id=place_id,
+                    defaults={'name': place_name}
+                )
                 places[place_id] = place
+                
             elif tag == 'person':
                 person_id = elem.get('id')
                 name_elem = elem.find(f'{{{GRAMPS_NS}}}name')
@@ -78,13 +97,17 @@ def import_gramps_data(file_path):
                 gender_elem = elem.find(f'{{{GRAMPS_NS}}}gender')
                 gender = gender_elem.text.upper() if gender_elem and gender_elem.text else 'U'
                 
-                person = Person.objects.create(
+                person, created = Person.objects.update_or_create(
                     gramps_id=person_id,
-                    first_name=first_name,
-                    last_name=last_name,
-                    gender=gender
+                    defaults={
+                        'first_name': first_name,
+                        'last_name': last_name,
+                        'gender': gender,
+                        'gramps_last_updated': timezone.now()
+                    }
                 )
                 people[person_id] = person
+                
             elif tag == 'family':
                 family_id = elem.get('id')
                 father_elem = elem.find(f'{{{GRAMPS_NS}}}father')
@@ -92,12 +115,17 @@ def import_gramps_data(file_path):
                 mother_elem = elem.find(f'{{{GRAMPS_NS}}}mother')
                 mother_id = mother_elem.get('hlink') if mother_elem is not None else None
                 
-                family = Family.objects.create(
+                family, created = Family.objects.update_or_create(
                     gramps_id=family_id,
-                    father=people.get(father_id),
-                    mother=people.get(mother_id)
+                    defaults={
+                        'father': people.get(father_id),
+                        'mother': people.get(mother_id)
+                    }
                 )
                 families[family_id] = family
+                
+                # Remove existing children relationships for this family
+                FamilyChild.objects.filter(family=family).delete()
                 
                 # Add children with their order from Gramps
                 for order, child_elem in enumerate(elem.findall(f'{{{GRAMPS_NS}}}childref')):
@@ -108,6 +136,7 @@ def import_gramps_data(file_path):
                             child=people[child_id],
                             order=order
                         )
+                        
             elif tag == 'event':
                 event_id = elem.get('id')
                 event_type = elem.get('type', 'unknown')
@@ -129,41 +158,92 @@ def import_gramps_data(file_path):
                     family_id = family_ref.get('hlink')
                     family_obj = families.get(family_id)
                 
-                Event.objects.create(
+                Event.objects.update_or_create(
                     gramps_id=event_id,
-                    type=event_type,
-                    date=date,
-                    place=places.get(place_id),
-                    description=description,
-                    person=person,
-                    family=family_obj
+                    defaults={
+                        'type': event_type,
+                        'date': date,
+                        'place': places.get(place_id),
+                        'description': description,
+                        'person': person,
+                        'family': family_obj
+                    }
                 )
+                
             elif tag == 'note':
                 note_id = elem.get('id')
                 text_elem = elem.find(f'{{{GRAMPS_NS}}}text')
                 text = text_elem.text if text_elem and text_elem.text else ''
                 
-                Note.objects.create(
+                Note.objects.update_or_create(
                     gramps_id=note_id,
-                    text=text,
-                    person=None,
-                    family=None,
-                    event=None
+                    defaults={
+                        'text': text,
+                        'person': None,
+                        'family': None,
+                        'event': None
+                    }
                 )
+                
             elif tag == 'object':
                 obj_id = elem.get('id')
                 file_elem = elem.find(f'{{{GRAMPS_NS}}}file')
-                file_path = file_elem.get('src') if file_elem else ''
+                source_file_path = file_elem.get('src') if file_elem else ''
                 mime_type = file_elem.get('mime') if file_elem else ''
                 description_elem = elem.find(f'{{{GRAMPS_NS}}}description')
                 description = description_elem.text if description_elem and description_elem.text else ''
                 
-                Media.objects.create(
+                # Handle media file copying using utility functions
+                relative_path = source_file_path
+                
+                if source_file_path:
+                    # Try to find the source file
+                    search_locations = [
+                        extracted_base_dir,
+                        Path(extracted_base_dir).parent if extracted_base_dir else None
+                    ]
+                    search_locations = [loc for loc in search_locations if loc]  # Remove None
+                    
+                    found_file = find_gramps_media_file(
+                        source_file_path,
+                        search_locations=search_locations
+                    )
+                    
+                    if found_file:
+                        # Copy file using utility function (handles permissions, duplicates, etc.)
+                        copied_path = copy_gramps_media_to_django(
+                            str(found_file),
+                            destination_subfolder='imported',
+                            handle_duplicates=True,
+                            set_permissions=True
+                        )
+                        
+                        if copied_path:
+                            relative_path = copied_path
+                        else:
+                            # Copy failed, but normalize the path anyway
+                            relative_path, _ = normalize_gramps_media_path(
+                                source_file_path,
+                                media_subfolder='imported',
+                                create_dirs=True
+                            )
+                    else:
+                        # File not found, normalize path anyway for database consistency
+                        relative_path, _ = normalize_gramps_media_path(
+                            source_file_path,
+                            media_subfolder='imported',
+                            create_dirs=True
+                        )
+                
+                Media.objects.update_or_create(
                     gramps_id=obj_id,
-                    file_path=file_path,
-                    mime_type=mime_type,
-                    description=description
+                    defaults={
+                        'file_path': relative_path,
+                        'mime_type': mime_type,
+                        'description': description
+                    }
                 )
+                
             # Clear element to save memory
             elem.clear()
         
