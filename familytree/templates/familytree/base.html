@@ -320,6 +320,7 @@
                                 <form method="post" action="{% url 'set_language' %}" style="display:inline;">
                                     {% csrf_token %}
                                     <input type="hidden" name="language" value="en">
+                                    <input type="hidden" name="next" value="{{ request.path }}">
                                     <button type="submit" class="dropdown-item">
                                         <i class="bi bi-check-circle{% if LANGUAGE_CODE == 'en' %}-fill{% endif %}"></i> English
                                     </button>
@@ -329,6 +330,7 @@
                                 <form method="post" action="{% url 'set_language' %}" style="display:inline;">
                                     {% csrf_token %}
                                     <input type="hidden" name="language" value="fr">
+                                    <input type="hidden" name="next" value="{{ request.path }}">
                                     <button type="submit" class="dropdown-item">
                                         <i class="bi bi-check-circle{% if LANGUAGE_CODE == 'fr' %}-fill{% endif %}"></i> Français
                                     </button>

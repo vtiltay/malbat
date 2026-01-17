@@ -362,31 +362,71 @@ def home(request):
     people = None
     
     if search_query:
-        # Recherche avancée avec PostgreSQL (unaccent pour ignorer les accents)
+        # Recherche avancée avec scoring basé sur:
+        # 1. ID Gramps exact (nombre entier) - PRIORITÉ ABSOLUE
+        # 2. Prénom exact/commence
+        # 3. Nom exact/commence
         from django.contrib.postgres.search import TrigramSimilarity
-        from django.db.models import Q, F
+        from django.db.models import Q, F, Value, CharField, Case, When, IntegerField
+        from django.db.models.functions import Concat
         
-        # Recherche exacte d'abord (insensible à la casse et aux accents)
-        people = Person.objects.filter(
-            Q(first_name__unaccent__icontains=search_query) |
-            Q(last_name__unaccent__icontains=search_query) |
-            Q(gramps_id__icontains=search_query)
+        # Créer un champ full_name virtuel pour la recherche
+        people = Person.objects.annotate(
+            full_name=Concat('first_name', Value(' '), 'last_name', output_field=CharField())
         )
         
-        # Si peu de résultats, ajouter recherche par similarité (pour les fautes de frappe)
-        if people.count() < 5:
-            similar_people = Person.objects.annotate(
+        # Vérifier si la requête est un nombre entier (pour ID Gramps)
+        is_numeric = search_query.isdigit()
+        
+        if is_numeric:
+            # Si c'est un nombre, chercher UNIQUEMENT l'ID Gramps exact
+            gramps_id_search = f'I{search_query.zfill(4)}'
+            people = people.filter(gramps_id__exact=gramps_id_search)
+        else:
+            # Sinon, appliquer le scoring pour prénom > nom
+            people = people.annotate(
+                relevance_score=Case(
+                    # Prénom exact (TRÈS haute priorité)
+                    When(
+                        first_name__unaccent__iexact=search_query,
+                        then=Value(1000)
+                    ),
+                    # Prénom commence par la requête
+                    When(
+                        first_name__unaccent__istartswith=search_query,
+                        then=Value(900)
+                    ),
+                    # Nom complet exact
+                    When(
+                        full_name__unaccent__iexact=search_query,
+                        then=Value(800)
+                    ),
+                    # Nom complet commence par la requête
+                    When(
+                        full_name__unaccent__istartswith=search_query,
+                        then=Value(700)
+                    ),
+                    # Nom seul exact
+                    When(
+                        last_name__unaccent__iexact=search_query,
+                        then=Value(500)
+                    ),
+                    # Nom seul commence par la requête
+                    When(
+                        last_name__unaccent__istartswith=search_query,
+                        then=Value(400)
+                    ),
+                    # Contient la requête
+                    default=Value(0),
+                    output_field=IntegerField()
+                ),
                 similarity=(
                     TrigramSimilarity('first_name', search_query) +
                     TrigramSimilarity('last_name', search_query)
                 )
-            ).filter(similarity__gt=0.3).order_by('-similarity')
-            
-            # Combiner les résultats (union)
-            people = (people | similar_people).distinct()
-        
-        # Trier par pertinence
-        people = people.order_by('last_name', 'first_name')
+            ).filter(
+                Q(relevance_score__gt=0) | Q(similarity__gt=0.3)
+            ).order_by('-relevance_score', '-similarity', 'first_name', 'last_name')
         
         # DEBUG: afficher le nombre de résultats
         print(f"DEBUG: Recherche '{search_query}' - {people.count()} résultats trouvés")
@@ -549,10 +589,68 @@ def propose_child(request, gramps_id_numeric):
     gramps_id = f'I{gramps_id_numeric:04d}'
     person = get_object_or_404(Person, gramps_id=gramps_id)
     
+    # Récupérer les conjoints et leurs familles
+    families_as_parent = Family.objects.filter(father=person) | Family.objects.filter(mother=person)
+    spouses_with_families = []
+    
+    for family in families_as_parent:
+        if family.father and family.father != person:
+            spouses_with_families.append({
+                'spouse': family.father,
+                'family': family,
+                'display_name': f"{person.first_name} {person.last_name} & {family.father.first_name} {family.father.last_name}"
+            })
+        if family.mother and family.mother != person:
+            spouses_with_families.append({
+                'spouse': family.mother,
+                'family': family,
+                'display_name': f"{person.first_name} {person.last_name} & {family.mother.first_name} {family.mother.last_name}"
+            })
+    
+    # Si aucun conjoint, rediriger avec message
+    if not spouses_with_families:
+        messages.error(request, _('You must add a spouse first before adding children.'))
+        return redirect('person_detail', gramps_id_numeric=gramps_id_numeric)
+    
+    # Déterminer le conjoint sélectionné
+    selected_spouse_id = request.POST.get('spouse_id') or request.GET.get('spouse_id')
+    selected_family_data = None
+    selected_spouse = None
+    
+    if selected_spouse_id:
+        # Chercher le conjoint sélectionné
+        try:
+            selected_spouse = Person.objects.get(gramps_id=selected_spouse_id)
+            # Trouver la bonne famille
+            for data in spouses_with_families:
+                if data['spouse'].id == selected_spouse.id:
+                    selected_family_data = data
+                    break
+        except Person.DoesNotExist:
+            pass
+    
+    # Si pas de sélection et un seul conjoint, le sélectionner automatiquement
+    if not selected_family_data and len(spouses_with_families) == 1:
+        selected_family_data = spouses_with_families[0]
+        selected_spouse = selected_family_data['spouse']
+    
     if request.method == 'POST':
+        # Vérifier qu'un conjoint est sélectionné
+        if not selected_spouse:
+            form = AddChildForm()
+            messages.error(request, _('Please select a spouse to add a child.'))
+            context = {
+                'form': form,
+                'person': person,
+                'spouses_with_families': spouses_with_families,
+                'selected_spouse': selected_spouse,
+                'modification_type': 'enfant'
+            }
+            return render(request, 'familytree/propose_child.html', context)
+        
         form = AddChildForm(request.POST)
         if form.is_valid():
-            # Créer une proposition
+            # Créer une proposition avec les deux parents
             modification = ProposedModification.objects.create(
                 user=request.user,
                 person=person,
@@ -563,6 +661,8 @@ def propose_child(request, gramps_id_numeric):
                     'last_name': form.cleaned_data['last_name'],
                     'gender': form.cleaned_data['gender'],
                     'birth_date': str(form.cleaned_data['birth_date']) if form.cleaned_data['birth_date'] else None,
+                    'parent1_id': person.gramps_id,
+                    'parent2_id': selected_spouse.gramps_id,
                 }
             )
             messages.success(request, _(f'Your child addition proposal has been sent. Number: #{modification.id}'))
@@ -573,6 +673,9 @@ def propose_child(request, gramps_id_numeric):
     context = {
         'form': form,
         'person': person,
+        'spouses_with_families': spouses_with_families,
+        'selected_spouse': selected_spouse,
+        'selected_family_data': selected_family_data,
         'modification_type': 'enfant'
     }
     return render(request, 'familytree/propose_child.html', context)

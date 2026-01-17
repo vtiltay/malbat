@@ -90,9 +90,9 @@ class ProposedModificationAdmin(admin.ModelAdmin):
     action_badge.short_description = _('Action')
     
     def entity_type_display(self, obj):
-        """Afficher le type d'entité de manière lisible"""
+        """Display relationship type in readable format"""
         return obj.get_entity_type_display()
-    entity_type_display.short_description = 'Type de relation'
+    entity_type_display.short_description = _('Relationship type')
     
     def status_badge(self, obj):
         """Badge coloré pour le statut"""
@@ -103,10 +103,10 @@ class ProposedModificationAdmin(admin.ModelAdmin):
             'rejected': '#f44336'
         }
         status_labels = {
-            'proposed': '📋 Proposée',
-            'acknowledged': '👀 Prise en compte',
-            'completed': '✅ Complétée',
-            'rejected': '❌ Rejetée'
+            'proposed': '📋 ' + _('Proposed'),
+            'acknowledged': '👀 ' + _('Acknowledged'),
+            'completed': '✅ ' + _('Completed'),
+            'rejected': '❌ ' + _('Rejected')
         }
         color = colors.get(obj.status, '#6c757d')
         label = status_labels.get(obj.status, obj.status)
@@ -114,7 +114,7 @@ class ProposedModificationAdmin(admin.ModelAdmin):
             '<span style="background-color: {}; color: white; padding: 5px 10px; border-radius: 3px; font-weight: bold;">{}</span>',
             color, label
         )
-    status_badge.short_description = 'Statut'
+    status_badge.short_description = _('Status')
     
     def created_at_display(self, obj):
         """Display creation date in readable format"""
