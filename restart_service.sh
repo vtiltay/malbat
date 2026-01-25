@@ -1,13 +1,24 @@
 #!/bin/bash
 
-PROJECT_DIR="malbat.org"
-VENV_PYTHON="malbat.org/bin/python"
+# Get project name from script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_NAME="$(basename "$SCRIPT_DIR")"
+PROJECT_DIR="$SCRIPT_DIR"
+
+# Use venv from standard location
+VENV_DIR="/home/debian/venvs/$PROJECT_NAME"
+VENV_PYTHON="$VENV_DIR/bin/python"
 MANAGE_PY="$PROJECT_DIR/manage.py"
-SERVICE_NAME="django_malbat.org.service"
-ENV_FILE="/home/debian/dotenvs/malbat.org"
-DB_HOST="localhost"
-DB_PORT="5432"
-DB_USER="django_user"
+
+# Service name (passed as argument or constructed)
+SERVICE_NAME="${1:-django_${PROJECT_NAME}.service}"
+
+# Environment file (loaded from .env file, not hardcoded)
+ENV_FILE="/home/debian/dotenvs/$PROJECT_NAME"
+
+# Database settings from environment (not hardcoded)
+DB_HOST="${DB_HOST:-localhost}"
+DB_PORT="${DB_PORT:-5432}"
 
 # Colors
 GREEN='\033[0;32m'
@@ -15,7 +26,7 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
-# Fonction pour vérifier si la BDD est disponible
+# Check database connection
 check_db_connection() {
     if pg_isready -h "$DB_HOST" -p "$DB_PORT" >/dev/null 2>&1; then
         return 0
@@ -27,9 +38,13 @@ echo -e "${GREEN}--- Starting Deployment/Restart Process ---${NC}"
 
 # 0. Load Environment Variables
 echo -e "${GREEN}[0/5] Loading environment variables...${NC}"
-set -a
-source "$ENV_FILE"
-set +a
+if [ -f "$ENV_FILE" ]; then
+    set -a
+    source "$ENV_FILE"
+    set +a
+else
+    echo -e "${YELLOW}[!] Warning: ENV file not found at $ENV_FILE${NC}"
+fi
 
 # Navigate to project directory
 cd "$PROJECT_DIR" || { echo "Directory not found"; exit 1; }
@@ -41,11 +56,11 @@ $VENV_PYTHON "$MANAGE_PY" collectstatic --noinput 2>/dev/null || true
 # 4. Check Database Connection & Apply Migrations
 echo -e "${GREEN}[4/5] Checking database connection...${NC}"
 if check_db_connection; then
-    echo -e "${GREEN}[+] BDD OK - Applying migrations...${NC}"
+    echo -e "${GREEN}[+] Database OK - Applying migrations...${NC}"
     $VENV_PYTHON "$MANAGE_PY" makemigrations 2>/dev/null || true
     $VENV_PYTHON "$MANAGE_PY" migrate 2>/dev/null || true
 else
-    echo -e "${YELLOW}[!] BDD indisponible sur $DB_HOST:$DB_PORT - Migrations ignorées${NC}"
+    echo -e "${YELLOW}[!] Database unavailable at $DB_HOST:$DB_PORT - Migrations skipped${NC}"
 fi
 
 # 5. Restart Gunicorn Service
