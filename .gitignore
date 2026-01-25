@@ -1,276 +1,210 @@
-# ============================================
-# SENSITIVE DATA - NEVER COMMIT
-# ============================================
 
-# Environment variables and secrets
-.env
-.env.*
-.env.local
-.env.production
-.env.development
-.env.staging
-*.env
-env.py
-secrets.py
-secrets.json
-config.local.py
-local_settings.py
-
-# Database files and backups
-db.sqlite3
-db.sqlite3-journal
-*.db
-*.sqlite
-*.sqlite3
-*.sql
-*.dump
-*.backup
-
-# SSL/TLS certificates and keys
-*.pem
-*.key
-*.crt
-*.cert
-*.p12
-*.pfx
-*.pub
-ssl/
-certs/
-private/
-
-# SSH keys
-id_rsa
-id_rsa.pub
-id_ed25519
-id_ed25519.pub
-.ssh/
-
-# Cloud provider credentials
-.aws/
-.azure/
-.gcloud/
-.credentials
-credentials.json
-service-account*.json
-
-# API keys and tokens
-*api_key*
-*apikey*
-*token*
-*secret*
-.secrets/
-
-# Password files
-*password*
-*passwd*
-htpasswd
-.htpasswd
-
-# ============================================
-# PERSONAL/GENEALOGICAL DATA
-# ============================================
-
-# Gramps files (contain personal family data)
-/gramps/
-*.gramps
-*.gpkg
-*.ged
-*.gedcom
-
-# Media files (photos, documents)
-/media/
-media/imported/
-media/uploads/
-media/gramps_imports/
+!/familytree/static/
 !/media/.gitkeep
-
+# !*/migrations/__init__.py
+# *.service
+# */migrations/*.py
+# ============================================
+# API keys and tokens
+# BACKUPS
 # Backups of personal data
-backups/
+# Cloud provider credentials
+# DJANGO
+# DOCUMENTATION (SENSITIVE)
+# Database files and backups
+# Django cache
+# Django local settings
+# Django migrations (if you don't want to track them - uncomment if needed)
+# Django sessions
+# Emacs
+# Environment variables and secrets
+# Gramps files (contain personal family data)
+# IDE / EDITORS
+# Linux
+# Media files (photos, documents)
+# Nginx/Apache configs with sensitive data
+# OPERATING SYSTEMS
+# PERSONAL/GENEALOGICAL DATA
+# PYTHON
+# Password files
+# Personal notes and documentation
+# PyCharm
+# SENSITIVE DATA - NEVER COMMIT
+# SERVER CONFIGURATIONS (POTENTIALLY SENSITIVE)
+# SSH keys
+# SSL/TLS certificates and keys
+# Static files (generated)
+# Sublime Text
+# Systemd service files (may contain secrets)
+# TEMPORARY FILES
+# Testing
+# Uncomment above if your configs contain sensitive data
+# Uncomment if your service files contain secrets
+# VS Code
+# Vim
+# Virtual environments
+# Windows
+# apache.conf
+# macOS
+# nginx.conf
+$RECYCLE.BIN/
+*$py.class
 *.backup
 *.bak
-
-# ============================================
-# DJANGO
-# ============================================
-
-# Django local settings
-local_settings.py
-local.py
-
-# Static files (generated)
-/staticfiles/
-/static/
-!/familytree/static/
-
-
-# Django cache
-.cache/
-cache/
-
-# Django sessions
-sessions/
-
-# Django migrations (if you don't want to track them - uncomment if needed)
-# */migrations/*.py
-# !*/migrations/__init__.py
-
-# ============================================
-# PYTHON
-# ============================================
-
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Virtual environments
-venv/
-ENV/
-env/
-.venv/
-.virtualenv/
-/srv/venvs/
-pyvenv.cfg
-
-# Testing
-.coverage
-.coverage.*
-htmlcov/
-.pytest_cache/
-.tox/
-.hypothesis/
-*.cover
-.cache
-nosetests.xml
-coverage.xml
-
-# ============================================
-# IDE / EDITORS
-# ============================================
-
-# VS Code
-.vscode/
-*.code-workspace
-
-# PyCharm
-.idea/
-*.iml
-
-# Sublime Text
-*.sublime-project
-*.sublime-workspace
-
-# Vim
-*.swp
-*.swo
-*~
-.netrwhist
-
-# Emacs
-*~
-\#*\#
-.\#*
-
-# ============================================
-# OPERATING SYSTEMS
-# ============================================
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon
-._*
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Windows
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
-*.stackdump
-[Dd]esktop.ini
-$RECYCLE.BIN/
 *.cab
+*.cert
+*.code-workspace
+*.cover
+*.crt
+*.db
+*.dump
+*.egg
+*.egg-info/
+*.env
+*.ged
+*.gedcom
+*.gpkg
+*.gramps
+*.iml
+*.key
+*.lnk
 *.msi
 *.msix
 *.msm
 *.msp
-*.lnk
-
-# Linux
-.directory
-.Trash-*
-.nfs*
-
-# ============================================
-# DOCUMENTATION (SENSITIVE)
-# ============================================
-
-# Personal notes and documentation
-GITHUB_COMMANDS.md
-NOTES.md
-TODO.md
-*PRIVATE*.md
-*SENSITIVE*.md
-*CONFIDENTIAL*.md
-
-# ============================================
-# TEMPORARY FILES
-# ============================================
-
-*.tmp
-*.temp
-*.bak
-*.swp
-*.swo
-*~
-.DS_Store
-
-# ============================================
-# SERVER CONFIGURATIONS (POTENTIALLY SENSITIVE)
-# ============================================
-
-# Nginx/Apache configs with sensitive data
-# nginx.conf
-# apache.conf
-# Uncomment above if your configs contain sensitive data
-
-# Systemd service files (may contain secrets)
-# *.service
-# Uncomment if your service files contain secrets
-
-# ============================================
-# BACKUPS
-# ============================================
-
-backup/
-backups/
-*.backup
 *.old
 *.orig
+*.p12
+*.pem
+*.pfx
+*.pub
+*.py[cod]
+*.so
+*.sql
+*.sqlite
+*.sqlite3
+*.stackdump
+*.sublime-project
+*.sublime-workspace
+*.swo
+*.swp
+*.temp
+*.tmp
+*CONFIDENTIAL*.md
+*PRIVATE*.md
+*SENSITIVE*.md
+*api_key*
+*apikey*
+*passwd*
+*password*
+*secret*
+*token*
+*~
+.AppleDouble
+.DS_Store
+.DocumentRevisions-V100
+.LSOverride
+.Python
+.Spotlight-V100
+.TemporaryItems
+.Trash-*
+.Trashes
+.VolumeIcon.icns
+.\#*
+._*
+.aws/
+.azure/
+.cache
+.cache/
+.com.apple.timemachine.donotpresent
+.coverage
+.coverage.*
+.credentials
+.directory
+.eggs/
+.env
+.env.*
+.env.development
+.env.local
+.env.production
+.env.staging
+.fseventsd
+.gcloud/
+.htpasswd
+.hypothesis/
+.idea/
+.installed.cfg
+.netrwhist
+.nfs*
+.pytest_cache/
+.secrets/
+.ssh/
+.tox/
+.venv/
+.virtualenv/
+.vscode/
+/gramps/
+/media/
+/srv/venvs/
+/static/
+/staticfiles/
+ENV/
+GITHUB_COMMANDS.md
+Icon
+MANIFEST
+NOTES.md
+TODO.md
+Thumbs.db
+Thumbs.db:encryptable
+[Dd]esktop.ini
+\#*\#
+__pycache__/
+backup/
+backups/
+build/
+cache/
+certs/
+config.local.py
+coverage.xml
+credentials.json
+db.sqlite3
+db.sqlite3-journal
+develop-eggs/
+dist/
+downloads/
+eggs/
+ehthumbs.db
+ehthumbs_vista.db
+env.py
+env/
+htmlcov/
+htpasswd
+id_ed25519
+id_ed25519.pub
+id_rsa
+id_rsa.pub
+lib/
+lib64/
+local.py
+local_settings.py
+media/gramps_imports/
+media/imported/
+media/uploads/
+nosetests.xml
+parts/
+pip-wheel-metadata/
+private/
+pyvenv.cfg
+restart_gunicorn.sh
+restart_service.sh
+restart_services.sh
+sdist/
+secrets.json
+secrets.py
+service-account*.json
+sessions/
+share/python-wheels/
+ssl/
+var/
+venv/
+wheels/
