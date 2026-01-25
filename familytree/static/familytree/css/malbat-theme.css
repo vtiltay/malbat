@@ -1,0 +1,544 @@
+/* ============================================
+   MALBAT.ORG - CUSTOM THEME (FORCE VERSION)
+   Avec !important pour override Bootstrap
+   ============================================ */
+
+/* ================================================
+   VARIABLES CSS
+   ================================================ */
+:root {
+    --malbat-primary: #5b7a9e !important;
+    --malbat-primary-hover: #4a6485 !important;
+    --malbat-gray-50: #fafbfc !important;
+    --malbat-gray-100: #f4f5f7 !important;
+    --malbat-gray-200: #e8eaed !important;
+    --malbat-success: #6b9d7f !important;
+    --malbat-warning: #b8956a !important;
+    --malbat-danger: #b87d7d !important;
+    --malbat-info: #7d9bb8 !important;
+}
+
+/* ================================================
+   FORCE BOOTSTRAP PRIMARY COLOR OVERRIDE
+   ================================================ */
+
+/* Badge primaire */
+.badge.bg-primary,
+span.badge.bg-primary {
+    background-color: #5b7a9e !important;
+}
+
+/* Boutons primaires */
+.btn-primary,
+a.btn-primary,
+button.btn-primary {
+    background-color: #5b7a9e !important;
+    border-color: #5b7a9e !important;
+    color: white !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+a.btn-primary:hover,
+button.btn-primary:hover {
+    background-color: #4a6485 !important;
+    border-color: #4a6485 !important;
+    color: white !important;
+}
+
+/* Boutons outline primary */
+.btn-outline-primary,
+a.btn-outline-primary {
+    color: #5b7a9e !important;
+    border-color: #e8eaed !important;
+    background-color: white !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+a.btn-outline-primary:hover {
+    background-color: #f0f4f8 !important;
+    border-color: #5b7a9e !important;
+    color: #5b7a9e !important;
+}
+
+/* ================================================
+   AUTRES BOUTONS COLORÉS
+   ================================================ */
+
+/* Success */
+.btn-outline-success,
+a.btn-outline-success {
+    color: #6b9d7f !important;
+    border-color: #e8eaed !important;
+    background-color: white !important;
+}
+
+.btn-outline-success:hover,
+a.btn-outline-success:hover {
+    background-color: #f0f7f3 !important;
+    color: #6b9d7f !important;
+    border-color: #6b9d7f !important;
+}
+
+/* Warning */
+.btn-outline-warning,
+a.btn-outline-warning {
+    color: #b8956a !important;
+    border-color: #e8eaed !important;
+    background-color: white !important;
+}
+
+.btn-outline-warning:hover,
+a.btn-outline-warning:hover {
+    background-color: #faf6f0 !important;
+    color: #b8956a !important;
+    border-color: #b8956a !important;
+}
+
+/* Danger */
+.btn-outline-danger,
+a.btn-outline-danger {
+    color: #b87d7d !important;
+    border-color: #e8eaed !important;
+    background-color: white !important;
+}
+
+.btn-outline-danger:hover,
+a.btn-outline-danger:hover {
+    background-color: #f9f2f2 !important;
+    color: #b87d7d !important;
+    border-color: #b87d7d !important;
+}
+
+/* Secondary */
+.btn-outline-secondary,
+a.btn-outline-secondary {
+    color: #6c7580 !important;
+    border-color: #e8eaed !important;
+    background-color: white !important;
+}
+
+.btn-outline-secondary:hover,
+a.btn-outline-secondary:hover {
+    background-color: #f4f5f7 !important;
+    color: #4a5259 !important;
+    border-color: #e8eaed !important;
+}
+
+/* ================================================
+   BACKGROUNDS COLORÉS
+   ================================================ */
+
+.bg-primary {
+    background: linear-gradient(135deg, #5b7a9e 0%, #7d9bb8 100%) !important;
+}
+
+.bg-success {
+    background-color: #6b9d7f !important;
+}
+
+.bg-warning {
+    background-color: #b8956a !important;
+}
+
+.bg-danger {
+    background-color: #b87d7d !important;
+}
+
+.bg-info {
+    background-color: #7d9bb8 !important;
+}
+
+.bg-light {
+    background-color: #f4f5f7 !important;
+}
+
+/* ================================================
+   TEXTES COLORÉS
+   ================================================ */
+
+.text-primary,
+i.text-primary {
+    color: #5b7a9e !important;
+}
+
+.text-success,
+i.text-success {
+    color: #6b9d7f !important;
+}
+
+.text-danger,
+i.text-danger {
+    color: #b87d7d !important;
+}
+
+.text-warning,
+i.text-warning {
+    color: #b8956a !important;
+}
+
+.text-info,
+i.text-info {
+    color: #7d9bb8 !important;
+}
+
+.text-muted {
+    color: #9fa6b2 !important;
+}
+
+.text-secondary {
+    color: #6c7580 !important;
+}
+
+/* ================================================
+   ICÔNES DANS NAVBAR
+   ================================================ */
+
+.navbar-brand i.bi-diagram-3 {
+    color: #5b7a9e !important;
+}
+
+.nav-link {
+    color: #6c7580 !important;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: #5b7a9e !important;
+}
+
+.nav-link i {
+    color: #9fa6b2 !important;
+}
+
+.nav-link:hover i {
+    color: #5b7a9e !important;
+}
+
+/* ================================================
+   NAVBAR STYLE
+   ================================================ */
+
+.navbar {
+    background-color: white !important;
+    border-bottom: 1px solid #e8eaed !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+.navbar-brand {
+    color: #2d3338 !important;
+}
+
+.navbar-brand:hover {
+    color: #5b7a9e !important;
+}
+
+/* ================================================
+   CARTES
+   ================================================ */
+
+.card {
+    border: 1px solid #e8eaed !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.card-header {
+    background-color: #fafbfc !important;
+    border-bottom: 1px solid #e8eaed !important;
+}
+
+.card.bg-light {
+    background-color: #fafbfc !important;
+    border: 1px solid #e8eaed !important;
+}
+
+/* ================================================
+   OMBRES SUBTILES
+   ================================================ */
+
+.shadow-sm {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+.shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ================================================
+   BORDURES
+   ================================================ */
+
+.border,
+.border-bottom {
+    border-color: #e8eaed !important;
+}
+
+/* ================================================
+   CERCLES D'AVATAR
+   ================================================ */
+
+.rounded-circle {
+    border: 2px solid rgba(255, 255, 255, 0.9) !important;
+}
+
+/* ================================================
+   LIENS
+   ================================================ */
+
+a {
+    color: #5b7a9e !important;
+    text-decoration: none !important;
+}
+
+a:hover {
+    color: #4a6485 !important;
+}
+
+/* Mais pas dans les cartes */
+.card a.text-decoration-none,
+.card a.text-dark {
+    color: #4a5259 !important;
+}
+
+.card a.text-decoration-none:hover,
+.card a.text-dark:hover {
+    background-color: #fafbfc !important;
+}
+
+/* ================================================
+   TYPOGRAPHIE
+   ================================================ */
+
+body {
+    color: #4a5259 !important;
+}
+
+h1, h2, h3, h4, h5, h6,
+.display-5 {
+    color: #2d3338 !important;
+}
+
+/* ================================================
+   FORMULAIRES
+   ================================================ */
+
+.form-control,
+.form-select {
+    border-color: #e8eaed !important;
+    background-color: #fafbfc !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #5b7a9e !important;
+    box-shadow: 0 0 0 0.15rem rgba(91, 122, 158, 0.15) !important;
+    background-color: white !important;
+}
+
+/* ================================================
+   CODE BLOCKS
+   ================================================ */
+
+code {
+    background-color: #f4f5f7 !important;
+    color: #4a5259 !important;
+    padding: 0.2rem 0.4rem !important;
+    border-radius: 4px !important;
+}
+
+/* ================================================
+   DROPDOWN
+   ================================================ */
+
+.dropdown-menu {
+    border: 1px solid #e8eaed !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.dropdown-item {
+    color: #4a5259 !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: #fafbfc !important;
+    color: #2d3338 !important;
+}
+
+.dropdown-item i {
+    color: #9fa6b2 !important;
+}
+
+.dropdown-item:hover i {
+    color: #5b7a9e !important;
+}
+
+/* ================================================
+   PAGINATION
+   ================================================ */
+
+.page-link {
+    color: #6c7580 !important;
+    border-color: #e8eaed !important;
+    background-color: white !important;
+}
+
+.page-link:hover {
+    color: #5b7a9e !important;
+    background-color: #fafbfc !important;
+    border-color: #e8eaed !important;
+}
+
+.page-item.active .page-link {
+    background-color: #5b7a9e !important;
+    border-color: #5b7a9e !important;
+    color: white !important;
+}
+
+/* ================================================
+   TABLES
+   ================================================ */
+
+.table {
+    color: #4a5259 !important;
+}
+
+.table thead,
+.table-light {
+    background-color: #fafbfc !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #fafbfc !important;
+}
+
+/* ================================================
+   ALERTES
+   ================================================ */
+
+.alert {
+    border-radius: 8px !important;
+    border-left: 3px solid !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+}
+
+.alert-success {
+    background-color: #f0f7f3 !important;
+    border-left-color: #6b9d7f !important;
+    color: #2d3338 !important;
+}
+
+.alert-warning {
+    background-color: #faf6f0 !important;
+    border-left-color: #b8956a !important;
+    color: #2d3338 !important;
+}
+
+.alert-danger,
+.alert-error {
+    background-color: #f9f2f2 !important;
+    border-left-color: #b87d7d !important;
+    color: #2d3338 !important;
+}
+
+/* ================================================
+   SÉPARATEUR
+   ================================================ */
+
+hr {
+    border-top: 1px solid #e8eaed !important;
+    opacity: 1 !important;
+}
+
+/* ================================================
+   CHEVRONS
+   ================================================ */
+
+.bi-chevron-right {
+    opacity: 0.3 !important;
+}
+
+.card a:hover .bi-chevron-right {
+    opacity: 0.6 !important;
+}
+
+/* ================================================
+   BOUTONS - TAILLES TACTILES
+   ================================================ */
+
+.btn {
+    min-height: 48px !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+}
+
+.btn-sm {
+    min-height: 42px !important;
+    padding: 0.625rem 1.25rem !important;
+}
+
+.btn-lg {
+    min-height: 56px !important;
+    padding: 1rem 2rem !important;
+}
+
+/* ================================================
+   NAVBAR RESPONSIVE
+   ================================================ */
+
+.navbar {
+    min-height: 64px !important;
+    padding: 1rem 0 !important;
+}
+
+.navbar-toggler {
+    min-width: 48px !important;
+    min-height: 48px !important;
+    border-color: #e8eaed !important;
+}
+
+.nav-link {
+    padding: 1rem 1.25rem !important;
+    min-height: 48px !important;
+}
+
+/* ================================================
+   TRANSITIONS DOUCES
+   ================================================ */
+
+.btn,
+.card,
+.nav-link,
+a {
+    transition: all 0.2s ease !important;
+}
+
+/* ================================================
+   MOBILE OPTIMIZATIONS
+   ================================================ */
+
+@media (max-width: 767.98px) {
+    .btn {
+        width: 100% !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .navbar {
+        min-height: 56px !important;
+        padding: 0.75rem 0 !important;
+    }
+}

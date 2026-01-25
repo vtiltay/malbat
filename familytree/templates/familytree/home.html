@@ -1,0 +1,332 @@
+{% extends "familytree/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Home - Malbat.org" %}{% endblock %}
+
+{% block content %}
+    <!-- Search Section -->
+    <section class="mb-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h4 class="card-title mb-3">
+                    <i class="bi bi-search text-primary"></i> {% trans "Search for a person" %}
+                </h4>
+                <form method="get" action="{% url 'home' %}" class="row g-3">
+                    <div class="col-md-10">
+                        <input type="text" name="q" class="form-control form-control-lg" 
+                               placeholder="{% trans 'Enter a name, first name or Gramps ID...' %}" 
+                               value="{{ search_query }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="bi bi-search"></i> {% trans "Search" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Results -->
+    {% if search_query %}
+    <section class="mb-5">
+        <h4 class="mb-3">
+            <i class="bi bi-people"></i> {% blocktrans %}Results for "{{ search_query }}"{% endblocktrans %}
+            <span class="badge bg-secondary">{{ people.paginator.count }} {% blocktrans count counter=people.paginator.count %}found{% plural %}found{% endblocktrans %}</span>
+        </h4>
+        
+        {% if people %}
+        <!-- Cartes de résultats -->
+        <div class="row g-4 mb-4">
+            {% for person in people %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 shadow-sm hover-card">
+                    <a href="{% url 'person_detail' person.gramps_id_numeric %}" class="text-decoration-none">
+                        <!-- Header avec avatar -->
+                        <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #5b7a9e 0%, #7d9bb8 100%); border: none;">
+                            <div class="mb-2">
+                                {% if person.gender == 'M' %}
+                                    <i class="bi bi-person-fill" style="font-size: 3rem; color: white;"></i>
+                                {% elif person.gender == 'F' %}
+                                    <i class="bi bi-person-fill" style="font-size: 3rem; color: white;"></i>
+                                {% else %}
+                                    <i class="bi bi-question-circle-fill" style="font-size: 3rem; color: white;"></i>
+                                {% endif %}
+                            </div>
+                            <h5 class="text-white mb-0 fw-bold">{{ person.first_name }}</h5>
+                            <h5 class="text-white mb-0 fw-bold">{{ person.last_name }}</h5>
+                        </div>
+                        
+                        <!-- Corps de la carte -->
+                        <div class="card-body">
+                            <!-- Parents -->
+                            {% with parents=person.get_parents %}
+                            {% if parents %}
+                            <div class="mb-3 pb-3 border-bottom">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-diagram-2 text-primary me-2"></i>
+                                    <small class="text-muted fw-bold">{% trans "Parents" %}</small>
+                                </div>
+                                <div class="ps-4">
+                                    {% for parent in parents %}
+                                        <div class="small text-secondary">
+                                            <i class="bi bi-arrow-return-right"></i> {{ parent.first_name }} {{ parent.last_name }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endwith %}
+                            
+                            <!-- Informations -->
+                            <div class="small">
+                                <!-- Gramps ID -->
+                                <div class="mb-2 d-flex align-items-center">
+                                    <i class="bi bi-hash text-muted me-2"></i>
+                                    <code class="bg-light px-2 py-1 rounded">{{ person.gramps_id }}</code>
+                                </div>
+                                
+                                <!-- Genre -->
+                                <div class="mb-2">
+                                    {% if person.gender == 'M' %}
+                                        <span class="badge" style="background-color: #7d9bb8;"><i class="bi bi-gender-male"></i> {% trans "Male" %}</span>
+                                    {% elif person.gender == 'F' %}
+                                        <span class="badge" style="background-color: #b87d7d;"><i class="bi bi-gender-female"></i> {% trans "Female" %}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary"><i class="bi bi-gender-ambiguous"></i> {% trans "Unknown" %}</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Dates -->
+                                {% if person.birth_date %}
+                                    <div class="mb-2 d-flex align-items-center text-muted">
+                                        <i class="bi bi-calendar-check me-2"></i>
+                                        <span>{{ person.birth_date|date:"d/m/Y" }}</span>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if person.death_date %}
+                                    <div class="mb-2 d-flex align-items-center text-muted">
+                                        <i class="bi bi-calendar-x me-2"></i>
+                                        <span>{{ person.death_date|date:"d/m/Y" }}</span>
+                                    </div>
+                                {% elif person.is_deceased %}
+                                    <div class="mb-2 d-flex align-items-center text-muted">
+                                        <i class="bi bi-calendar-x me-2"></i>
+                                        <span>{% trans "Deceased" %}</span>
+                                    </div>
+                                {% else %}
+                                    <div class="mb-2">
+                                        <span class="badge bg-success"><i class="bi bi-heart-pulse"></i> {% trans "Living" %}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div class="card-footer bg-light text-center border-top py-2">
+                            <small class="text-primary fw-bold">
+                                <i class="bi bi-arrow-right-circle"></i> {% trans "View Profile" %}
+                            </small>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if people.has_other_pages %}
+        <nav aria-label="{% trans 'Search results navigation' %}">
+            <ul class="pagination justify-content-center">
+                {% if people.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ search_query }}&page={{ people.previous_page_number }}">&laquo; {% trans "Previous" %}</a>
+                </li>
+                {% endif %}
+                
+                <li class="page-item disabled">
+                    <span class="page-link">{% blocktrans %}Page {{ page_num }} of {{ num_pages }}{% endblocktrans %}</span>
+                </li>
+                
+                {% if people.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ search_query }}&page={{ people.next_page_number }}">{% trans "Next" %} &raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> {% blocktrans %}No person found for "{{ search_query }}".{% endblocktrans %}
+        </div>
+        {% endif %}
+    </section>
+    
+    <hr class="my-5">
+    {% endif %}
+
+    <!-- Hero Section -->
+    <section class="mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="mb-3">
+                    <i class="bi bi-diagram-3 text-primary"></i>
+                    {% trans "Discover Your Family Tree" %}
+                </h1>
+                <p class="lead text-muted mb-4">
+                    {% trans "Explore your family's stories across generations. A private and secure platform to document and share your genealogy." %}
+                </p>
+                {% if not user.is_authenticated %}
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-plus"></i> {% trans "Create Account" %}
+                        </a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> {% trans "Sign In" %}
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'my_proposals' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-clipboard-check"></i> {% trans "View My Proposals" %}
+                    </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body text-center p-5">
+                        <div class="display-1 mb-3">🌳</div>
+                        <h3 class="card-title">{% trans "Your Family Heritage" %}</h3>
+                        <p class="card-text text-muted">
+                            {% trans "Preserve and pass on your family's history to future generations." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="my-5">
+
+    <!-- Statistics Section -->
+    {% if total_people > 0 %}
+    <section class="mb-5">
+        <h2 class="mb-4 text-center">
+            <i class="bi bi-graph-up"></i> {% trans "Genealogy Statistics" %}
+        </h2>
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-primary fs-2">{{ total_people }}</h3>
+                        <p class="card-text text-muted">{% trans "People Registered" %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-danger fs-2">{{ total_families }}</h3>
+                        <p class="card-text text-muted">{% trans "Families Documented" %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-success fs-2">{{ living_count }}</h3>
+                        <p class="card-text text-muted">{% trans "Living People" %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-warning fs-2">{{ deceased_count }}</h3>
+                        <p class="card-text text-muted">{% trans "Deceased People" %}</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if earliest_birth %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-info fs-2">{{ earliest_birth|date:"Y" }}</h3>
+                        <p class="card-text text-muted">{% trans "Earliest Ancestor" %}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if latest_birth %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-secondary fs-2">{{ latest_birth|date:"Y" }}</h3>
+                        <p class="card-text text-muted">{% trans "Latest Generation" %}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <hr class="my-5">
+    {% endif %}
+
+    <!-- Features Section -->
+    <section>
+        <h2 class="mb-4 text-center">
+            <i class="bi bi-star"></i> {% trans "Key Features" %}
+        </h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-primary mb-3">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <h5 class="card-title">{% trans "Family Tree" %}</h5>
+                        <p class="card-text text-muted">
+                            {% trans "Visualize family connections across generations in an intuitive and modern way." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-danger mb-3">
+                            <i class="bi bi-person-hearts"></i>
+                        </div>
+                        <h5 class="card-title">{% trans "Detailed Profiles" %}</h5>
+                        <p class="card-text text-muted">
+                            {% trans "Discover the stories and lives of your ancestors with complete information and photos." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-success mb-3">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <h5 class="card-title">{% trans "Private & Secure" %}</h5>
+                        <p class="card-text text-muted">
+                            {% trans "Your family data remains private and protected with advanced security measures." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

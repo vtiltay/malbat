@@ -1,0 +1,176 @@
+{% extends "familytree/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Welcome" %} - Malbat.org{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="mb-3">
+                    <i class="bi bi-diagram-3 text-primary"></i>
+                    {% trans "Discover Your Family Tree" %}
+                </h1>
+                <p class="lead text-muted mb-4">
+                    {% trans "Explore your family's stories across generations. A private and secure platform to document and share your genealogy." %}
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-person-plus"></i> {% trans "Create Account" %}
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> {% trans "Sign In" %}
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body text-center p-5">
+                        <div class="display-1 mb-3">🌳</div>
+                        <h3 class="card-title">{% trans "Your Family Heritage" %}</h3>
+                        <p class="card-text text-muted">
+                            {% trans "Preserve and pass on your family's history for generations to come." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="my-5">
+
+    <!-- Statistics Section -->
+    {% if total_people > 0 %}
+    <section class="mb-5">
+        <h2 class="mb-4 text-center">
+            <i class="bi bi-graph-up"></i> {% trans "Genealogy Statistics" %}
+        </h2>
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-primary fs-2">{{ total_people }}</h3>
+                        <p class="card-text text-muted">{% trans "Registered People" %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-danger fs-2">{{ total_families }}</h3>
+                        <p class="card-text text-muted">{% trans "Documented Families" %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-success fs-2">{{ living_count }}</h3>
+                        <p class="card-text text-muted">{% trans "Living People" %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-warning fs-2">{{ deceased_count }}</h3>
+                        <p class="card-text text-muted">{% trans "Deceased People" %}</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if earliest_birth %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-info fs-2">{{ earliest_birth|date:"Y" }}</h3>
+                        <p class="card-text text-muted">{% trans "Earliest Ancestor" %}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if latest_birth %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-secondary fs-2">{{ latest_birth|date:"Y" }}</h3>
+                        <p class="card-text text-muted">{% trans "Latest Generation" %}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <hr class="my-5">
+    {% endif %}
+
+    <!-- Features Section -->
+    <section>
+        <h2 class="mb-4 text-center">
+            <i class="bi bi-star"></i> {% trans "Key Features" %}
+        </h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-primary mb-3">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <h5 class="card-title">{% trans "Family Tree" %}</h5>
+                        <p class="card-text text-muted">
+                            {% trans "Visualize family connections across generations in an intuitive and modern way." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-danger mb-3">
+                            <i class="bi bi-person-hearts"></i>
+                        </div>
+                        <h5 class="card-title">{% trans "Detailed Profiles" %}</h5>
+                        <p class="card-text text-muted">
+                            {% trans "Discover the stories and lives of your ancestors with complete information and photos." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="fs-1 text-success mb-3">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <h5 class="card-title">{% trans "Private & Secure" %}</h5>
+                        <p class="card-text text-muted">
+                            {% trans "Your access to family data is protected by secure authentication." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="mt-5 p-5 bg-light rounded-lg text-center">
+        <h3 class="mb-4">{% trans "Ready to Explore Your Genealogy?" %}</h3>
+        <p class="text-muted mb-4">{% trans "Create an account or sign in to access all features." %}</p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                <i class="bi bi-person-plus"></i> {% trans "Create Account" %}
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-box-arrow-in-right"></i> {% trans "Sign In" %}
+            </a>
+        </div>
+    </section>
+{% endblock %}

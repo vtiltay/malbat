@@ -1,0 +1,98 @@
+{% extends "familytree/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "People" %} - Malbat.org{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if people %}
+        <div class="mb-5">
+            <h2>{% trans "Search Results" %}</h2>
+            <p class="text-muted">{% blocktrans count counter=paginator.count %}Found {{ counter }} person{% plural %}Found {{ counter }} people{% endblocktrans %}</p>
+        </div>
+        
+        <div class="row g-4 mb-5">
+            {% for person in people %}
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <a href="{% url 'person_detail' person.gramps_id_numeric %}" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm h-100 text-center">
+                            <div class="ratio ratio-1x1 bg-light position-relative overflow-hidden" style="background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);">
+                                <div class="text-white d-flex align-items-center justify-content-center fs-2">
+                                    {% if person.gender == 'M' %}👨{% elif person.gender == 'F' %}👩{% else %}👤{% endif %}
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title text-dark">{{ person.first_name }} {{ person.last_name }}</h6>
+                                <div class="small text-muted">
+                                    {% if person.birth_date %}<div>{% trans "Born" %}: {{ person.birth_date|date:"Y" }}</div>{% endif %}
+                                    {% if person.death_date %}<div>{% trans "Died" %}: {{ person.death_date|date:"Y" }}</div>{% else %}{% if person.birth_date %}<div>{% trans "Living" %}</div>{% endif %}{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">« {% trans 'First' %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹ {% trans 'Previous' %}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">« {% trans 'First' %}</span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">‹ {% trans 'Previous' %}</span>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">{% blocktrans %}Page {{ page }} of {{ total }}{% endblocktrans %}</span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans 'Next' %} ›</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ paginator.num_pages }}">{% trans 'Last' %} »</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">{% trans 'Next' %} ›</span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">{% trans 'Last' %} »</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <div class="display-1 mb-3">🔍</div>
+                <h4 class="text-dark mb-2">{% trans "No people found" %}</h4>
+                <p class="text-muted mb-4">
+                    {% if request.GET.first_name__icontains %}
+                        {% trans "Try another search term" %}
+                    {% else %}
+                        {% trans "Start by searching for a person" %}
+                    {% endif %}
+                </p>
+                <a href="{% url 'home' %}" class="btn btn-primary">
+                    <i class="bi bi-house-door"></i> {% trans "Back to Home" %}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

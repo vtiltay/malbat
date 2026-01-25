@@ -1,0 +1,81 @@
+{% extends "familytree/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Login" %} - Malbat.org{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-sm-8 col-md-6 col-lg-5">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="card-title text-center mb-2">
+                        <i class="bi bi-box-arrow-in-right"></i> {% trans "Sign In" %}
+                    </h1>
+                    <p class="text-center text-muted mb-4">
+                        {% trans "Access your family tree" %}
+                    </p>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">
+                                <i class="bi bi-person"></i> {% trans "Username or Email" %}
+                            </label>
+                            <input 
+                                type="text" 
+                                name="username" 
+                                id="{{ form.username.id_for_label }}" 
+                                class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                                placeholder="{% trans 'Your username or email' %}" 
+                                required 
+                                autofocus
+                            >
+                            {% if form.username.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.username.errors %}
+                                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="{{ form.password.id_for_label }}" class="form-label">
+                                <i class="bi bi-lock"></i> {% trans "Password" %}
+                            </label>
+                            <input 
+                                type="password" 
+                                name="password" 
+                                id="{{ form.password.id_for_label }}" 
+                                class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                                placeholder="{% trans 'Your password' %}" 
+                                required
+                            >
+                            {% if form.password.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.password.errors %}
+                                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-2 mb-3">
+                            <i class="bi bi-box-arrow-in-right"></i> {% trans "Sign In" %}
+                        </button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <p class="text-center text-muted mb-0">
+                        {% trans "Don't have an account yet?" %} 
+                        <a href="{% url 'register' %}" class="text-decoration-none fw-bold">
+                            {% trans "Register" %}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

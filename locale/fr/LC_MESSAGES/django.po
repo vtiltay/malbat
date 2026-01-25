@@ -1,0 +1,875 @@
+# French translations for Malbat.org
+# Copyright (C) 2026 Victor Tiltay
+# This file is distributed under the same license as the PACKAGE package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Malbat.org 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-23 19:27+0000\n"
+"PO-Revision-Date: 2026-01-23 19:27+0000\n"
+"Last-Translator: Victor Tiltay <vtiltay@gmail.com>\n"
+"Language-Team: French <fr@li.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: familytree/admin.py:50
+msgid "Proposal information"
+msgstr "Informations sur la proposition"
+
+#: familytree/admin.py:53 familytree/admin.py:134
+msgid "Proposed data"
+msgstr "Données proposées"
+
+#: familytree/admin.py:57
+msgid "Admin processing"
+msgstr "Traitement par l'administrateur"
+
+#: familytree/admin.py:59
+msgid "Mark the status after processing in Gramps and add notes"
+msgstr "Marquez le statut après traitement dans Gramps et ajoutez des notes"
+
+#: familytree/admin.py:78
+msgid "User"
+msgstr "Utilisateur"
+
+#: familytree/admin.py:83 familytree/templates/familytree/my_proposals.html:65
+msgid "Add"
+msgstr "Ajouter"
+
+#: familytree/admin.py:83 familytree/templates/familytree/my_proposals.html:65
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: familytree/admin.py:83 familytree/templates/familytree/my_proposals.html:65
+#: familytree/templates/familytree/person_detail.html:327
+msgid "Delete"
+msgstr "Supprimer"
+
+#: familytree/admin.py:90
+msgid "Action"
+msgstr "Action"
+
+#: familytree/admin.py:95 familytree/forms.py:102
+msgid "Relationship type"
+msgstr "Type de relation"
+
+#: familytree/admin.py:106 familytree/templates/familytree/my_proposals.html:73
+msgid "Proposed"
+msgstr "Proposée"
+
+#: familytree/admin.py:107 familytree/templates/familytree/my_proposals.html:74
+msgid "Acknowledged"
+msgstr "Prise en compte"
+
+#: familytree/admin.py:108 familytree/templates/familytree/my_proposals.html:42
+#: familytree/templates/familytree/my_proposals.html:75
+msgid "Completed"
+msgstr "Terminée"
+
+#: familytree/admin.py:109 familytree/templates/familytree/my_proposals.html:50
+#: familytree/templates/familytree/my_proposals.html:76
+msgid "Rejected"
+msgstr "Rejetée"
+
+#: familytree/admin.py:117
+#: familytree/templates/familytree/person_detail.html:79
+msgid "Status"
+msgstr "Statut"
+
+#: familytree/admin.py:122
+msgid "Proposed on"
+msgstr "Proposée le"
+
+#: familytree/forms.py:24 familytree/templates/familytree/login.html:45
+#: familytree/templates/familytree/register.html:66
+msgid "Password"
+msgstr "Mot de passe"
+
+#: familytree/forms.py:31
+msgid "Confirm password"
+msgstr "Confirmez le mot de passe"
+
+#: familytree/forms.py:45
+msgid "This email is already in use."
+msgstr "Cet email est déjà utilisé."
+
+#: familytree/forms.py:51
+msgid "This username is already taken."
+msgstr "Ce nom d'utilisateur est déjà pris."
+
+#: familytree/forms.py:101
+msgid "Action type"
+msgstr "Type d'action"
+
+#: familytree/forms.py:103
+msgid "Affected person *"
+msgstr "Personne concernée *"
+
+#: familytree/forms.py:104
+msgid "Person ID to update (Gramps ID)"
+msgstr "ID de la personne à mettre à jour (ID Gramps)"
+
+#: familytree/forms.py:105
+msgid "Data (JSON format)"
+msgstr "Données (format JSON)"
+
+#: familytree/forms.py:112
+msgid "Your profile / Affected person *"
+msgstr "Votre profil / Personne concernée *"
+
+#: familytree/forms.py:120
+msgid "You must select a person affected by this proposal."
+msgstr "Vous devez sélectionner une personne concernée par cette proposition."
+
+#: familytree/forms.py:128 familytree/forms.py:163
+#: familytree/templates/familytree/propose_child.html:50
+#: familytree/templates/familytree/propose_child.html:57
+msgid "First name"
+msgstr "Prénom"
+
+#: familytree/forms.py:136 familytree/forms.py:171
+#: familytree/templates/familytree/propose_child.html:71
+#: familytree/templates/familytree/propose_child.html:78
+msgid "Last name"
+msgstr "Nom de famille"
+
+#: familytree/forms.py:143 familytree/forms.py:178
+#: familytree/templates/familytree/home.html:92
+#: familytree/templates/familytree/person_detail.html:93
+msgid "Male"
+msgstr "Homme"
+
+#: familytree/forms.py:143 familytree/forms.py:178
+#: familytree/templates/familytree/home.html:94
+#: familytree/templates/familytree/person_detail.html:93
+msgid "Female"
+msgstr "Femme"
+
+#: familytree/forms.py:143 familytree/forms.py:178
+#: familytree/templates/familytree/home.html:96
+#: familytree/templates/familytree/person_detail.html:93
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: familytree/forms.py:144 familytree/forms.py:179
+#: familytree/templates/familytree/person_detail.html:92
+#: familytree/templates/familytree/propose_child.html:92
+msgid "Gender"
+msgstr "Genre"
+
+#: familytree/forms.py:151 familytree/forms.py:186
+#: familytree/templates/familytree/propose_child.html:113
+msgid "Birth date"
+msgstr "Date de naissance"
+
+#: familytree/forms.py:198
+msgid "Person ID to delete (Gramps ID)"
+msgstr "ID de la personne à supprimer (ID Gramps)"
+
+#: familytree/forms.py:205
+msgid "I confirm the deletion"
+msgstr "Je confirme la suppression"
+
+#: familytree/models.py:59
+msgid "Mark as deceased even without date"
+msgstr "Marquer comme décédé même sans date"
+
+#: familytree/models.py:63
+msgid "When this record was first created in the database"
+msgstr "Date de création de cet enregistrement dans la base de données"
+
+#: familytree/models.py:64
+msgid "Last modification time (any change, including web app edits)"
+msgstr "Date de la dernière modification (tout changement, y compris les modifications via l'application web)"
+
+#: familytree/models.py:66
+msgid "Last update from Gramps synchronization"
+msgstr "Dernière mise à jour depuis la synchronisation Gramps"
+
+#: familytree/models.py:156
+msgid "Child order in family (from Gramps)"
+msgstr "Ordre de l'enfant dans la famille (depuis Gramps)"
+
+#: familytree/models.py:224
+msgid "Name for this import"
+msgstr "Nom pour cet import"
+
+#: familytree/models.py:306
+msgid "Gramps ID of person for update/deletion"
+msgstr "ID Gramps de la personne pour la mise à jour/suppression"
+
+#: familytree/models.py:309
+msgid "Data to add/modify"
+msgstr "Données à ajouter/modifier"
+
+#: familytree/models.py:320
+msgid "Notes when processing in Gramps"
+msgstr "Notes lors du traitement dans Gramps"
+
+#: familytree/templates/familytree/base.html:12
+msgid "Malbat.org - Family Tree"
+msgstr "Malbat.org - Arbre Généalogique"
+
+#: familytree/templates/familytree/base.html:277
+msgid "Home"
+msgstr "Accueil"
+
+#: familytree/templates/familytree/base.html:284
+#: familytree/templates/familytree/my_proposals.html:4
+#: familytree/templates/familytree/person_detail.html:332
+msgid "My Proposals"
+msgstr "Mes Propositions"
+
+#: familytree/templates/familytree/base.html:294
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: familytree/templates/familytree/base.html:301
+#: familytree/templates/familytree/login.html:4
+msgid "Login"
+msgstr "Connexion"
+
+#: familytree/templates/familytree/base.html:306
+#: familytree/templates/familytree/login.html:74
+#: familytree/templates/familytree/register.html:4
+msgid "Register"
+msgstr "S'inscrire"
+
+#: familytree/templates/familytree/base.html:364
+msgid "Close"
+msgstr "Fermer"
+
+#: familytree/templates/familytree/home.html:4
+msgid "Home - Malbat.org"
+msgstr "Accueil - Malbat.org"
+
+#: familytree/templates/familytree/home.html:12
+msgid "Search for a person"
+msgstr "Rechercher une personne"
+
+#: familytree/templates/familytree/home.html:17
+msgid "Enter a name, first name or Gramps ID..."
+msgstr "Entrez un nom, prénom ou ID Gramps..."
+
+#: familytree/templates/familytree/home.html:22
+msgid "Search"
+msgstr "Rechercher"
+
+#: familytree/templates/familytree/home.html:34
+#, python-format
+msgid "Results for \"%(search_query)s\""
+msgstr "Résultats pour \"%(search_query)s\""
+
+#: familytree/templates/familytree/home.html:35
+msgid "found"
+msgid_plural "found"
+msgstr[0] "trouvé"
+msgstr[1] "trouvés"
+
+#: familytree/templates/familytree/home.html:68
+#: familytree/templates/familytree/person_detail.html:112
+#: familytree/templates/familytree/propose_child.html:32
+msgid "Parents"
+msgstr "Parents"
+
+#: familytree/templates/familytree/home.html:116
+msgid "Deceased"
+msgstr "Décédé(e)"
+
+#: familytree/templates/familytree/home.html:120
+#: familytree/templates/familytree/person_detail.html:80
+#: familytree/templates/familytree/person_list.html:28
+msgid "Living"
+msgstr "Vivant(e)"
+
+#: familytree/templates/familytree/home.html:129
+msgid "View Profile"
+msgstr "Voir le profil"
+
+#: familytree/templates/familytree/home.html:140
+msgid "Search results navigation"
+msgstr "Navigation des résultats de recherche"
+
+#: familytree/templates/familytree/home.html:144
+#: familytree/templates/familytree/person_list.html:46
+#: familytree/templates/familytree/person_list.html:53
+msgid "Previous"
+msgstr "Précédent"
+
+#: familytree/templates/familytree/home.html:149
+#, python-format
+msgid "Page %(page_num)s of %(num_pages)s"
+msgstr "Page %(page_num)s sur %(num_pages)s"
+
+#: familytree/templates/familytree/home.html:154
+#: familytree/templates/familytree/person_list.html:63
+#: familytree/templates/familytree/person_list.html:70
+msgid "Next"
+msgstr "Suivant"
+
+#: familytree/templates/familytree/home.html:163
+#, python-format
+msgid "No person found for \"%(search_query)s\"."
+msgstr "Aucune personne trouvée pour \"%(search_query)s\"."
+
+#: familytree/templates/familytree/home.html:177
+#: familytree/templates/familytree/landing.html:13
+msgid "Discover Your Family Tree"
+msgstr "Découvrez Votre Arbre Généalogique"
+
+#: familytree/templates/familytree/home.html:180
+#: familytree/templates/familytree/landing.html:16
+msgid ""
+"Explore your family's stories across generations. A private and secure "
+"platform to document and share your genealogy."
+msgstr "Explorez les histoires de votre famille à travers les générations. Une plateforme privée et sécurisée pour documenter et partager votre généalogie."
+
+#: familytree/templates/familytree/home.html:185
+#: familytree/templates/familytree/landing.html:20
+#: familytree/templates/familytree/landing.html:169
+#: familytree/templates/familytree/register.html:12
+#: familytree/templates/familytree/register.html:107
+msgid "Create Account"
+msgstr "Créer un Compte"
+
+#: familytree/templates/familytree/home.html:188
+#: familytree/templates/familytree/landing.html:23
+#: familytree/templates/familytree/landing.html:172
+#: familytree/templates/familytree/login.html:12
+#: familytree/templates/familytree/login.html:65
+#: familytree/templates/familytree/person_detail.html:341
+#: familytree/templates/familytree/register.html:116
+msgid "Sign In"
+msgstr "Se Connecter"
+
+#: familytree/templates/familytree/home.html:193
+msgid "View My Proposals"
+msgstr "Voir Mes Propositions"
+
+#: familytree/templates/familytree/home.html:201
+#: familytree/templates/familytree/landing.html:31
+msgid "Your Family Heritage"
+msgstr "Votre Patrimoine Familial"
+
+#: familytree/templates/familytree/home.html:203
+msgid "Preserve and pass on your family's history to future generations."
+msgstr "Préservez et transmettez l'histoire de votre famille aux générations futures."
+
+#: familytree/templates/familytree/home.html:217
+#: familytree/templates/familytree/landing.html:47
+msgid "Genealogy Statistics"
+msgstr "Statistiques de la Généalogie"
+
+#: familytree/templates/familytree/home.html:224
+msgid "People Registered"
+msgstr "Personnes Enregistrées"
+
+#: familytree/templates/familytree/home.html:233
+msgid "Families Documented"
+msgstr "Familles Documentées"
+
+#: familytree/templates/familytree/home.html:242
+#: familytree/templates/familytree/landing.html:72
+msgid "Living People"
+msgstr "Personnes Vivantes"
+
+#: familytree/templates/familytree/home.html:251
+#: familytree/templates/familytree/landing.html:81
+msgid "Deceased People"
+msgstr "Personnes Décédées"
+
+#: familytree/templates/familytree/home.html:261
+#: familytree/templates/familytree/landing.html:91
+msgid "Earliest Ancestor"
+msgstr "Plus Ancien Ancêtre"
+
+#: familytree/templates/familytree/home.html:272
+#: familytree/templates/familytree/landing.html:102
+msgid "Latest Generation"
+msgstr "Dernière Génération"
+
+#: familytree/templates/familytree/home.html:286
+#: familytree/templates/familytree/landing.html:116
+msgid "Key Features"
+msgstr "Fonctionnalités Clés"
+
+#: familytree/templates/familytree/home.html:295
+#: familytree/templates/familytree/landing.html:125
+msgid "Family Tree"
+msgstr "Arbre Généalogique"
+
+#: familytree/templates/familytree/home.html:297
+#: familytree/templates/familytree/landing.html:127
+msgid ""
+"Visualize family connections across generations in an intuitive and modern "
+"way."
+msgstr "Visualisez les liens familiaux à travers les générations de manière intuitive et moderne."
+
+#: familytree/templates/familytree/home.html:309
+#: familytree/templates/familytree/landing.html:139
+msgid "Detailed Profiles"
+msgstr "Profils Détaillés"
+
+#: familytree/templates/familytree/home.html:311
+#: familytree/templates/familytree/landing.html:141
+msgid ""
+"Discover the stories and lives of your ancestors with complete information "
+"and photos."
+msgstr "Découvrez les histoires et la vie de vos ancêtres avec des informations complètes et des photos."
+
+#: familytree/templates/familytree/home.html:323
+#: familytree/templates/familytree/landing.html:153
+msgid "Private & Secure"
+msgstr "Privé & Sécurisé"
+
+#: familytree/templates/familytree/home.html:325
+msgid ""
+"Your family data remains private and protected with advanced security "
+"measures."
+msgstr "Vos données familiales restent privées et protégées par des mesures de sécurité avancées."
+
+#: familytree/templates/familytree/landing.html:4
+msgid "Welcome"
+msgstr "Bienvenue"
+
+#: familytree/templates/familytree/landing.html:33
+msgid "Preserve and pass on your family's history for generations to come."
+msgstr "Préservez et transmettez l'histoire de votre famille pour les générations à venir."
+
+#: familytree/templates/familytree/landing.html:54
+msgid "Registered People"
+msgstr "Personnes Enregistrées"
+
+#: familytree/templates/familytree/landing.html:63
+msgid "Documented Families"
+msgstr "Familles Documentées"
+
+#: familytree/templates/familytree/landing.html:155
+msgid "Your access to family data is protected by secure authentication."
+msgstr "Votre accès aux données familiales est protégé par une authentification sécurisée."
+
+#: familytree/templates/familytree/landing.html:165
+msgid "Ready to Explore Your Genealogy?"
+msgstr "Prêt à Explorer Votre Généalogie ?"
+
+#: familytree/templates/familytree/landing.html:166
+msgid "Create an account or sign in to access all features."
+msgstr "Créez un compte ou connectez-vous pour accéder à toutes les fonctionnalités."
+
+#: familytree/templates/familytree/login.html:15
+msgid "Access your family tree"
+msgstr "Accédez à votre arbre généalogique"
+
+#: familytree/templates/familytree/login.html:23
+msgid "Username or Email"
+msgstr "Nom d'utilisateur ou Email"
+
+#: familytree/templates/familytree/login.html:30
+msgid "Your username or email"
+msgstr "Votre nom d'utilisateur ou email"
+
+#: familytree/templates/familytree/login.html:52
+msgid "Your password"
+msgstr "Votre mot de passe"
+
+#: familytree/templates/familytree/login.html:72
+msgid "Don't have an account yet?"
+msgstr "Vous n'avez pas encore de compte ?"
+
+#: familytree/templates/familytree/my_proposals.html:9
+msgid "My Modification Proposals"
+msgstr "Mes Propositions de Modification"
+
+#: familytree/templates/familytree/my_proposals.html:18
+msgid "Total"
+msgstr "Total"
+
+#: familytree/templates/familytree/my_proposals.html:26
+msgid "Pending"
+msgstr "En attente"
+
+#: familytree/templates/familytree/my_proposals.html:34
+msgid "In Progress"
+msgstr "En cours"
+
+#: familytree/templates/familytree/my_proposals.html:84
+msgid "Created"
+msgstr "Créée le"
+
+#: familytree/templates/familytree/my_proposals.html:89
+msgid "Proposed Data"
+msgstr "Données Proposées"
+
+#: familytree/templates/familytree/my_proposals.html:98
+msgid "Admin Notes"
+msgstr "Notes de l'administrateur"
+
+#: familytree/templates/familytree/my_proposals.html:110
+msgid "You haven't made any proposals yet."
+msgstr "Vous n'avez encore fait aucune proposition."
+
+#: familytree/templates/familytree/my_proposals.html:112
+#: familytree/templates/familytree/person_list.html:92
+#: familytree/templates/familytree/propose_modification.html:149
+msgid "Back to Home"
+msgstr "Retour à l'Accueil"
+
+#: familytree/templates/familytree/person_detail.html:35
+msgid "Copy ID"
+msgstr "Copier l'ID"
+
+#: familytree/templates/familytree/person_detail.html:53
+#: familytree/templates/familytree/person_list.html:27
+msgid "Born"
+msgstr "Né(e) le"
+
+#: familytree/templates/familytree/person_detail.html:67
+#: familytree/templates/familytree/person_list.html:28
+msgid "Died"
+msgstr "Décédé(e) le"
+
+#: familytree/templates/familytree/person_detail.html:129
+msgid "Father"
+msgstr "Père"
+
+#: familytree/templates/familytree/person_detail.html:129
+msgid "Mother"
+msgstr "Mère"
+
+#: familytree/templates/familytree/person_detail.html:148
+msgid "Siblings"
+msgstr "Fratrie"
+
+#: familytree/templates/familytree/person_detail.html:186
+msgid "Family"
+msgstr "Famille"
+
+#: familytree/templates/familytree/person_detail.html:207
+msgid "Husband"
+msgstr "Mari"
+
+#: familytree/templates/familytree/person_detail.html:207
+msgid "Wife"
+msgstr "Femme"
+
+#: familytree/templates/familytree/person_detail.html:222
+msgid "Children"
+msgstr "Enfants"
+
+#: familytree/templates/familytree/person_detail.html:263
+msgid "Notes"
+msgstr "Notes"
+
+#: familytree/templates/familytree/person_detail.html:284
+msgid "Last updated in Gramps"
+msgstr "Dernière mise à jour dans Gramps"
+
+#: familytree/templates/familytree/person_detail.html:301
+#: familytree/templates/familytree/propose_modification.html:4
+#: familytree/templates/familytree/propose_modification.html:13
+msgid "Propose Modification"
+msgstr "Proposer une Modification"
+
+#: familytree/templates/familytree/person_detail.html:306
+msgid "Spouse"
+msgstr "Conjoint(e)"
+
+#: familytree/templates/familytree/person_detail.html:312
+#: familytree/templates/familytree/person_detail.html:316
+msgid "Child"
+msgstr "Enfant"
+
+#: familytree/templates/familytree/person_detail.html:315
+msgid "Add a spouse first"
+msgstr "Ajoutez d'abord un conjoint"
+
+#: familytree/templates/familytree/person_detail.html:322
+msgid "Advanced"
+msgstr "Avancé"
+
+#: familytree/templates/familytree/person_detail.html:340
+msgid "Sign in"
+msgstr "Connectez-vous"
+
+#: familytree/templates/familytree/person_detail.html:340
+msgid "to propose modifications"
+msgstr "pour proposer des modifications"
+
+#: familytree/templates/familytree/person_detail.html:350
+msgid "ID copied to clipboard!"
+msgstr "ID copié dans le presse-papiers !"
+
+#: familytree/templates/familytree/person_list.html:4
+msgid "People"
+msgstr "Personnes"
+
+#: familytree/templates/familytree/person_list.html:10
+msgid "Search Results"
+msgstr "Résultats de la Recherche"
+
+#: familytree/templates/familytree/person_list.html:11
+#, python-format
+msgid "Found %(counter)s person"
+msgid_plural "Found %(counter)s people"
+msgstr[0] "%(counter)s personne trouvée"
+msgstr[1] "%(counter)s personnes trouvées"
+
+#: familytree/templates/familytree/person_list.html:43
+#: familytree/templates/familytree/person_list.html:50
+msgid "First"
+msgstr "Premier"
+
+#: familytree/templates/familytree/person_list.html:58
+#, python-format
+msgid "Page %(page)s of %(total)s"
+msgstr "Page %(page)s sur %(total)s"
+
+#: familytree/templates/familytree/person_list.html:66
+#: familytree/templates/familytree/person_list.html:73
+msgid "Last"
+msgstr "Dernier"
+
+#: familytree/templates/familytree/person_list.html:83
+msgid "No people found"
+msgstr "Aucune personne trouvée"
+
+#: familytree/templates/familytree/person_list.html:86
+msgid "Try another search term"
+msgstr "Essayez un autre terme de recherche"
+
+#: familytree/templates/familytree/person_list.html:88
+msgid "Start by searching for a person"
+msgstr "Commencez par rechercher une personne"
+
+#: familytree/templates/familytree/propose_child.html:4
+#: familytree/templates/familytree/propose_child.html:13
+msgid "Add Child"
+msgstr "Ajouter un Enfant"
+
+#: familytree/templates/familytree/propose_child.html:18
+msgid "Select a family to add a child to:"
+msgstr "Sélectionnez une famille à laquelle ajouter un enfant :"
+
+#: familytree/templates/familytree/propose_child.html:22
+msgid "child of"
+msgstr "enfant de"
+
+#: familytree/templates/familytree/propose_child.html:35
+msgid "Choose a family..."
+msgstr "Choisissez une famille..."
+
+#: familytree/templates/familytree/propose_child.html:132
+#: familytree/templates/familytree/propose_spouse.html:106
+msgid "Propose Addition"
+msgstr "Proposer l'Ajout"
+
+#: familytree/templates/familytree/propose_child.html:135
+#: familytree/templates/familytree/propose_delete.html:60
+#: familytree/templates/familytree/propose_modification.html:135
+#: familytree/templates/familytree/propose_spouse.html:109
+msgid "Cancel"
+msgstr "Annuler"
+
+#: familytree/templates/familytree/propose_delete.html:4
+#: familytree/templates/familytree/propose_delete.html:12
+msgid "Propose Deletion"
+msgstr "Proposer la Suppression"
+
+#: familytree/templates/familytree/propose_delete.html:14
+#, python-format
+msgid ""
+"You are about to propose the deletion of <strong>%(fname)s %(lname)s</strong>"
+msgstr "Vous êtes sur le point de proposer la suppression de <strong>%(fname)s %(lname)s</strong>"
+
+#: familytree/templates/familytree/propose_delete.html:15
+msgid ""
+"This action is irreversible. The administrator will review your request and "
+"validate it."
+msgstr "Cette action est irréversible. L'administrateur examinera votre demande et la validera."
+
+#: familytree/templates/familytree/propose_delete.html:24
+msgid "Person to Delete"
+msgstr "Personne à Supprimer"
+
+#: familytree/templates/familytree/propose_delete.html:28
+#, python-format
+msgid "Born %(birth_date)s"
+msgstr "Né(e) le %(birth_date)s"
+
+#: familytree/templates/familytree/propose_delete.html:43
+#, python-format
+msgid "I confirm the deletion of %(fname)s %(lname)s"
+msgstr "Je confirme la suppression de %(fname)s %(lname)s"
+
+#: familytree/templates/familytree/propose_delete.html:57
+msgid "Confirm Deletion"
+msgstr "Confirmer la Suppression"
+
+#: familytree/templates/familytree/propose_modification.html:16
+msgid "For complex modifications, use this advanced form with JSON format."
+msgstr "Pour les modifications complexes, utilisez ce formulaire avancé au format JSON."
+
+#: familytree/templates/familytree/propose_modification.html:27
+msgid "Select an action"
+msgstr "Sélectionnez une action"
+
+#: familytree/templates/familytree/propose_modification.html:48
+msgid "Select a type"
+msgstr "Sélectionnez un type"
+
+#: familytree/templates/familytree/propose_modification.html:69
+msgid "Select a person (optional)"
+msgstr "Sélectionnez une personne (facultatif)"
+
+#: familytree/templates/familytree/propose_modification.html:94
+msgid "Example: I0001"
+msgstr "Exemple : I0001"
+
+#: familytree/templates/familytree/propose_modification.html:96
+msgid "Entity ID (e.g. I0001)"
+msgstr "ID de l'entité (par ex. I0001)"
+
+#: familytree/templates/familytree/propose_modification.html:118
+msgid "JSON format with fields to add/modify."
+msgstr "Format JSON avec les champs à ajouter/modifier."
+
+#: familytree/templates/familytree/propose_modification.html:119
+msgid "Example"
+msgstr "Exemple"
+
+#: familytree/templates/familytree/propose_modification.html:132
+msgid "Send Proposal"
+msgstr "Envoyer la Proposition"
+
+#: familytree/templates/familytree/propose_modification.html:145
+msgid "Quick Forms"
+msgstr "Formulaires Rapides"
+
+#: familytree/templates/familytree/propose_modification.html:147
+msgid ""
+"To quickly add a spouse or child, go to a person's page and use the "
+"available buttons."
+msgstr "Pour ajouter rapidement un conjoint ou un enfant, allez sur la page d'une personne et utilisez les boutons disponibles."
+
+#: familytree/templates/familytree/propose_spouse.html:4
+#: familytree/templates/familytree/propose_spouse.html:13
+msgid "Add Spouse"
+msgstr "Ajouter un Conjoint"
+
+#: familytree/templates/familytree/propose_spouse.html:16
+#, python-format
+msgid "for %(fname)s %(lname)s"
+msgstr "pour %(fname)s %(lname)s"
+
+#: familytree/templates/familytree/propose_spouse.html:31
+msgid "First Name"
+msgstr "Prénom"
+
+#: familytree/templates/familytree/propose_spouse.html:52
+msgid "Last Name"
+msgstr "Nom de famille"
+
+#: familytree/templates/familytree/register.html:15
+msgid "Create your account to explore your genealogy"
+msgstr "Créez votre compte pour explorer votre généalogie"
+
+#: familytree/templates/familytree/register.html:23
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: familytree/templates/familytree/register.html:30
+msgid "Choose a username"
+msgstr "Choisissez un nom d'utilisateur"
+
+#: familytree/templates/familytree/register.html:41
+msgid "Maximum 150 characters. Letters, digits and @/./+/-/_ only."
+msgstr "150 caractères maximum. Lettres, chiffres et @/./+/-/_ uniquement."
+
+#: familytree/templates/familytree/register.html:46
+msgid "Email Address"
+msgstr "Adresse Email"
+
+#: familytree/templates/familytree/register.html:73
+msgid "Choose a secure password"
+msgstr "Choisissez un mot de passe sécurisé"
+
+#: familytree/templates/familytree/register.html:87
+msgid "Confirm Password"
+msgstr "Confirmez le Mot de Passe"
+
+#: familytree/templates/familytree/register.html:94
+msgid "Confirm your password"
+msgstr "Confirmez votre mot de passe"
+
+#: familytree/templates/familytree/register.html:114
+msgid "Already have an account?"
+msgstr "Vous avez déjà un compte ?"
+
+#: familytree/templates/familytree/register.html:126
+msgid "Security"
+msgstr "Sécurité"
+
+#: familytree/templates/familytree/register.html:129
+msgid ""
+"Your password must contain at least 8 characters and should not be too "
+"similar to your personal information."
+msgstr "Votre mot de passe doit contenir au moins 8 caractères et ne doit pas être trop similaire à vos informations personnelles."
+
+#: familytree/views.py:465
+msgid "Registration successful! You are now logged in."
+msgstr "Inscription réussie ! Vous êtes maintenant connecté."
+
+#: familytree/views.py:470
+#, python-brace-format
+msgid "{field}: {error}"
+msgstr "{field}: {error}"
+
+#: familytree/views.py:500
+#, python-brace-format
+msgid "Welcome {user.username}!"
+msgstr "Bienvenue {user.username} !"
+
+#: familytree/views.py:503
+msgid "Invalid username/email or password."
+msgstr "Nom d'utilisateur/email ou mot de passe invalide."
+
+#: familytree/views.py:512
+msgid "You have been logged out."
+msgstr "Vous avez été déconnecté."
+
+#: familytree/views.py:538
+msgid "The JSON format of the data is invalid."
+msgstr "Le format JSON des données est invalide."
+
+#: familytree/views.py:542
+#, python-brace-format
+msgid ""
+"Your proposal has been sent to the administrator. Number: #{modification.id}"
+msgstr "Votre proposition a été envoyée à l'administrateur. Numéro : #{modification.id}"
+
+#: familytree/views.py:573
+#, python-brace-format
+msgid "Your spouse addition proposal has been sent. Number: #{modification.id}"
+msgstr "Votre proposition d'ajout de conjoint a été envoyée. Numéro : #{modification.id}"
+
+#: familytree/views.py:612
+msgid "You must add a spouse first before adding children."
+msgstr "Vous devez d'abord ajouter un conjoint avant d'ajouter des enfants."
+
+#: familytree/views.py:641
+msgid "Please select a spouse to add a child."
+msgstr "Veuillez sélectionner un conjoint pour ajouter un enfant."
+
+#: familytree/views.py:668
+#, python-brace-format
+msgid "Your child addition proposal has been sent. Number: #{modification.id}"
+msgstr "Votre proposition d'ajout d'enfant a été envoyée. Numéro : #{modification.id}"
+
+#: familytree/views.py:702
+#, python-brace-format
+msgid "Your deletion proposal has been sent. Number: #{modification.id}"
+msgstr "Votre proposition de suppression a été envoyée. Numéro : #{modification.id}"

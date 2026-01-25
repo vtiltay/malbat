@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang=\"en\">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        .proposal-details {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            margin: 15px 0;
+        }
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+        .value {
+            color: #333;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 15px;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>🌳 New Proposal - Malbat.org Family Tree</h2>
+        </div>
+
+        <div class="content">
+            <p>Hello,</p>
+
+            <p>A new proposal has been submitted by <strong>{{ user.username }}</strong> ({{ user.get_full_name }}).</p>
+
+            <div class=\"proposal-details\">
+                <p><span class=\"label\">Proposal ID:</span> #{{ proposal.id }}</p>
+                <p><span class=\"label\">Action:</span> {{ action }}</p>
+                <p><span class=\"label\">Relationship Type:</span> {{ entity_type }}</p>
+                {% if person %}
+                <p><span class=\"label\">Person Concerned:</span> {{ person.first_name }} {{ person.last_name }} ({{ person.gramps_id }})</p>
+                {% endif %}
+                <p><span class=\"label\">Status:</span> {{ proposal.get_status_display }}</p>
+                <p><span class=\"label\">Date:</span> {{ proposal.created_at|date:\"d/m/Y H:i\" }}</p>
+            </div>
+
+            {% if proposal.data %}
+            <h4>📋 Proposed Data:</h4>
+            <div class="proposal-details">
+                {% for key, value in proposal.data.items %}
+                    <p><span class="label">{{ key }}:</span> <span class="value">{{ value }}</span></p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <p>
+                <a href="https://malbat.org/admin/familytree/proposedmodification/{{ proposal.id }}/change/" class="cta-button">
+                    View Proposal
+                </a>
+            </p>
+        </div>
+
+        <div class=\"footer\">
+            <p>This email was generated automatically. Please do not reply directly.</p>
+            <p>&copy; 2026 Malbat.org - Family Tree</p>
+        </div>
+    </div>
+</body>
+</html>

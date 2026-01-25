@@ -1,0 +1,377 @@
+{% extends "familytree/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ person.first_name }} {{ person.last_name }} - Malbat.org{% endblock %}
+
+{% block content %}
+    <!-- Header Profile -->
+    <div class="mb-5">
+        <div class="card border-0 shadow-lg overflow-hidden">
+            <div class="row g-0">
+                <!-- Photo -->
+                <div class="col-md-3">
+                    <div class="ratio ratio-1x1 bg-primary">
+                        <div class="d-flex align-items-center justify-content-center text-white">
+                            {% if person.media.all %}
+                                {% with person.media.all|first as first_media %}
+                                    {% if first_media.file_path %}
+                                        <img src="/{{ first_media.file_path }}" alt="{{ person.first_name }}" class="w-100 h-100 object-fit-cover">
+                                    {% else %}
+                                        <div class="display-4">{% if person.gender == 'M' %}👨{% elif person.gender == 'F' %}👩{% else %}👤{% endif %}</div>
+                                    {% endif %}
+                                {% endwith %}
+                            {% else %}
+                                <div class="display-4">{% if person.gender == 'M' %}👨{% elif person.gender == 'F' %}👩{% else %}👤{% endif %}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Info -->
+                <div class="col-md-9">
+                    <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-center">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <h1 class="display-5 fw-bold mb-0">{{ person.first_name }} {{ person.last_name }}</h1>
+                            <button class="btn btn-sm btn-outline-secondary copy-id-btn" data-id="{{ person.gramps_id_numeric }}" title="{% trans 'Copy ID' %}">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        </div>
+                        <div class="row g-3 mb-4 small">
+                            <div class="col-auto">
+                                <div class="text-muted">ID: <code class="bg-light px-2 py-1 rounded">{{ person.gramps_id_numeric }}</code></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-4">
+                            {% if person.birth_date %}
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
+                                        <i class="bi bi-calendar2-event fs-5 text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <div class="small text-muted">{% trans "Born" %}</div>
+                                        <div class="fw-bold">{{ person.birth_date|date:"d F Y" }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            {% if person.death_date %}
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
+                                        <i class="bi bi-calendar2-x fs-5 text-danger"></i>
+                                    </div>
+                                    <div>
+                                        <div class="small text-muted">{% trans "Died" %}</div>
+                                        <div class="fw-bold">{{ person.death_date|date:"d F Y" }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
+                                        <i class="bi bi-heart-fill fs-5 text-success"></i>
+                                    </div>
+                                    <div>
+                                        <div class="small text-muted">{% trans "Status" %}</div>
+                                        <div class="fw-bold text-success">{% trans "Living" %}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
+                                        <i class="bi bi-person-badge fs-5 text-secondary"></i>
+                                    </div>
+                                    <div>
+                                        <div class="small text-muted">{% trans "Gender" %}</div>
+                                        <div class="fw-bold">{% if person.gender == 'M' %}{% trans "Male" %}{% elif person.gender == 'F' %}{% trans "Female" %}{% else %}{% trans "Unknown" %}{% endif %}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Family Section -->
+    <div class="row g-4">
+        <!-- Parents -->
+        {% if parents %}
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-light border-bottom">
+                    <h6 class="mb-0">
+                        <i class="bi bi-people-fill text-primary"></i> {% trans "Parents" %}
+                    </h6>
+                </div>
+                <div class="card-body p-0">
+                    {% for parent in parents %}
+                        <a href="{% url 'person_detail' parent.gramps_id_numeric %}" class="text-decoration-none text-dark d-flex align-items-center gap-3 p-3 border-bottom">
+                            <div class="rounded-circle overflow-hidden bg-primary d-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 60px; height: 60px;">
+                                {% if parent.media.all %}
+                                    {% with parent.media.all|first as pm %}
+                                        {% if pm.file_path %}<img src="/{{ pm.file_path }}" alt="" class="w-100 h-100 object-fit-cover">{% else %}<div class="fs-5">{% if parent.gender == 'M' %}👨{% else %}👩{% endif %}</div>{% endif %}
+                                    {% endwith %}
+                                {% else %}
+                                    <div class="fs-5">{% if parent.gender == 'M' %}👨{% else %}👩{% endif %}</div>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1 min-w-0">
+                                <div class="fw-bold small">{{ parent.first_name }} {{ parent.last_name }}</div>
+                                <div class="text-muted small">{% if parent.gender == 'M' %}{% trans "Father" %}{% else %}{% trans "Mother" %}{% endif %}</div>
+                                <div class="text-secondary small">
+                                    {% if parent.birth_date %}Né {{ parent.birth_date|date:"Y" }}{% endif %}{% if parent.death_date %} - † {{ parent.death_date|date:"Y" }}{% elif parent.is_deceased %} - †{% endif %}
+                                </div>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted flex-shrink-0"></i>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Siblings -->
+        {% if siblings %}
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-light border-bottom">
+                    <h6 class="mb-0">
+                        <i class="bi bi-people-fill text-success"></i> {% trans "Siblings" %}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        {% for sibling in siblings %}
+                            <div class="col-sm-6">
+                                <a href="{% url 'person_detail' sibling.gramps_id_numeric %}" class="text-decoration-none text-dark d-flex align-items-center gap-2">
+                                    <div class="rounded-circle overflow-hidden bg-success d-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 50px; height: 50px;">
+                                        {% if sibling.media.all %}
+                                            {% with sibling.media.all|first as sm %}
+                                                {% if sm.file_path %}<img src="/{{ sm.file_path }}" alt="" class="w-100 h-100 object-fit-cover">{% else %}<div>{% if sibling.gender == 'M' %}👨{% else %}👩{% endif %}</div>{% endif %}
+                                            {% endwith %}
+                                        {% else %}
+                                            <div>{% if sibling.gender == 'M' %}👨{% else %}👩{% endif %}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="small fw-bold">{{ sibling.first_name }}</div>
+                                        <div class="text-secondary small">
+                                            {% if sibling.birth_date %}{{ sibling.birth_date|date:"Y" }}{% endif %}
+                                        </div>
+                                    </div>
+                                    <i class="bi bi-chevron-right text-muted ms-auto flex-shrink-0"></i>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Spouses & Children -->
+    {% if spouse_data %}
+    <div class="mt-4">
+        <h5 class="mb-3">
+            <i class="bi bi-heart-fill text-danger"></i> {% trans "Family" %}
+        </h5>
+        <div class="row g-4">
+            {% for spouse, spouse_children in spouse_data %}
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <!-- Spouse Header -->
+                        <a href="{% url 'person_detail' spouse.gramps_id_numeric %}" class="text-decoration-none text-dark">
+                            <div class="d-flex align-items-center gap-3 p-3 border-bottom">
+                                <div class="rounded-circle overflow-hidden bg-warning d-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 70px; height: 70px;">
+                                    {% if spouse.media.all %}
+                                        {% with spouse.media.all|first as sp_media %}
+                                            {% if sp_media.file_path %}<img src="/{{ sp_media.file_path }}" alt="" class="w-100 h-100 object-fit-cover">{% else %}<div class="fs-4">{% if spouse.gender == 'M' %}👨{% else %}👩{% endif %}</div>{% endif %}
+                                        {% endwith %}
+                                    {% else %}
+                                        <div class="fs-4">{% if spouse.gender == 'M' %}👨{% else %}👩{% endif %}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-bold">{{ spouse.first_name }} {{ spouse.last_name }}</div>
+                                    <div class="small text-muted">
+                                        <i class="bi bi-heart-fill text-danger"></i> {% if spouse.gender == 'M' %}{% trans "Husband" %}{% else %}{% trans "Wife" %}{% endif %}
+                                    </div>
+                                    <div class="text-secondary small">
+                                        {% if spouse.birth_date %}{{ spouse.birth_date|date:"Y" }}{% endif %}
+                                        {% if spouse.death_date %} - † {{ spouse.death_date|date:"Y" }}{% elif spouse.is_deceased %} - †{% endif %}
+                                    </div>
+                                </div>
+                                <i class="bi bi-chevron-right text-muted"></i>
+                            </div>
+                        </a>
+
+                        <!-- Children -->
+                        {% if spouse_children %}
+                            <div class="card-body">
+                                <h6 class="small text-muted mb-3">
+                                    <i class="bi bi-person-check text-success"></i> {% trans "Children" %}
+                                </h6>
+                                <div class="row g-2">
+                                    {% for child in spouse_children %}
+                                        <div class="col-sm-6">
+                                            <a href="{% url 'person_detail' child.gramps_id_numeric %}" class="text-decoration-none text-dark d-flex align-items-center gap-2">
+                                                <div class="rounded-circle overflow-hidden bg-info d-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 50px; height: 50px;">
+                                                    {% if child.media.all %}
+                                                        {% with child.media.all|first as cm %}
+                                                            {% if cm.file_path %}<img src="/media/{{ cm.file_path }}" alt="" class="w-100 h-100 object-fit-cover">{% else %}<div>{% if child.gender == 'M' %}👦{% else %}👧{% endif %}</div>{% endif %}
+                                                        {% endwith %}
+                                                    {% else %}
+                                                        <div>{% if child.gender == 'M' %}👦{% else %}👧{% endif %}</div>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <div class="small fw-bold">{{ child.first_name }}</div>
+                                                    <div class="text-secondary small">
+                                                        {% if child.birth_date %}{{ child.birth_date|date:"Y" }}{% endif %}
+                                                    </div>
+                                                </div>
+                                                <i class="bi bi-chevron-right text-muted ms-auto flex-shrink-0"></i>
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Notes Section -->
+    {% if person.notes.all %}
+    <div class="mt-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light border-bottom">
+                <h6 class="mb-0">
+                    <i class="bi bi-sticky text-warning"></i> {% trans "Notes" %}
+                </h6>
+            </div>
+            <div class="card-body">
+                {% for note in person.notes.all %}
+                    <div class="mb-3">
+                        <p class="text-muted small mb-2">{{ note.gramps_id }}</p>
+                        <p class="mb-0">{{ note.text }}</p>
+                    </div>
+                    {% if not forloop.last %}<hr class="my-3">{% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Gramps Last Updated Section -->
+    <div class="mt-4">
+        <div class="card border-0 shadow-sm bg-light">
+            <div class="card-body p-3">
+                <small class="text-muted">
+                    <i class="bi bi-clock-history"></i> {% trans "Last updated in Gramps" %}:
+                    {% if person.gramps_last_updated %}
+                        <strong>{{ person.gramps_last_updated|date:"d F Y H:i:s" }}</strong>
+                    {% else %}
+                        <span class="text-muted">-</span>
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions Section -->
+    <div class="mt-5">
+        {% if user.is_authenticated %}
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body p-4">
+                    <h6 class="mb-3">
+                        <i class="bi bi-pencil-square"></i> {% trans "Propose Modification" %}
+                    </h6>
+                    <div class="row g-2">
+                        <div class="col-sm-6 col-md-4">
+                            <a href="{% url 'propose_spouse' person.gramps_id_numeric %}" class="btn btn-sm btn-outline-primary w-100">
+                                <i class="bi bi-heart"></i> {% trans "Spouse" %}
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            {% if spouse_data %}
+                                <a href="{% url 'propose_child' person.gramps_id_numeric %}" class="btn btn-sm btn-outline-success w-100">
+                                    <i class="bi bi-person-plus"></i> {% trans "Child" %}
+                                </a>
+                            {% else %}
+                                <button class="btn btn-sm btn-outline-secondary w-100" disabled title="{% trans 'Add a spouse first' %}">
+                                    <i class="bi bi-person-plus"></i> {% trans "Child" %}
+                                </button>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <a href="{% url 'propose_modification' %}" class="btn btn-sm btn-outline-warning w-100">
+                                <i class="bi bi-pencil"></i> {% trans "Advanced" %}
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <a href="{% url 'propose_delete' person.gramps_id_numeric %}" class="btn btn-sm btn-outline-danger w-100">
+                                <i class="bi bi-trash"></i> {% trans "Delete" %}
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <a href="{% url 'my_proposals' %}" class="btn btn-sm btn-primary w-100">
+                                <i class="bi bi-clipboard-check"></i> {% trans "My Proposals" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info border-0">
+                <i class="bi bi-lock"></i> <strong>{% trans "Sign in" %}</strong> {% trans "to propose modifications" %}
+                <a href="{% url 'login' %}" class="btn btn-sm btn-primary ms-2">{% trans "Sign In" %}</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Copy ID Toast Notification -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="copyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                <i class="bi bi-check-circle text-success"></i> {% trans "ID copied to clipboard!" %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.copy-id-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const id = this.dataset.id;
+                navigator.clipboard.writeText(id).then(() => {
+                    // Show toast
+                    const toastEl = document.getElementById('copyToast');
+                    const toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                    
+                    // Change button temporarily
+                    const originalHtml = this.innerHTML;
+                    this.innerHTML = '<i class="bi bi-check"></i>';
+                    setTimeout(() => {
+                        this.innerHTML = originalHtml;
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

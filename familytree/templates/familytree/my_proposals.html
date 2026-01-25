@@ -1,0 +1,118 @@
+{% extends "familytree/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My Proposals" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">
+        <i class="bi bi-clipboard-list"></i> {% trans "My Modification Proposals" %}
+    </h1>
+    
+    <!-- Stats Grid -->
+    <div class="row g-3 mb-5">
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="fs-3 fw-bold text-dark">{{ stats.total }}</div>
+                    <div class="text-muted small">{% trans "Total" %}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm h-100 border-start border-warning border-3">
+                <div class="card-body text-center">
+                    <div class="fs-3 fw-bold text-warning">{{ stats.proposed }}</div>
+                    <div class="text-muted small">📋 {% trans "Pending" %}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm h-100 border-start border-info border-3">
+                <div class="card-body text-center">
+                    <div class="fs-3 fw-bold text-info">{{ stats.acknowledged }}</div>
+                    <div class="text-muted small">👀 {% trans "In Progress" %}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm h-100 border-start border-success border-3">
+                <div class="card-body text-center">
+                    <div class="fs-3 fw-bold text-success">{{ stats.completed }}</div>
+                    <div class="text-muted small">✅ {% trans "Completed" %}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm h-100 border-start border-danger border-3">
+                <div class="card-body text-center">
+                    <div class="fs-3 fw-bold text-danger">{{ stats.rejected }}</div>
+                    <div class="text-muted small">❌ {% trans "Rejected" %}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Proposals List -->
+    {% if proposals %}
+        <div class="space-y-3">
+            {% for proposal in proposals %}
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light border-bottom">
+                        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+                            <div class="d-flex gap-2 align-items-center flex-wrap">
+                                <span class="badge bg-{% if proposal.action == 'add' %}success{% elif proposal.action == 'update' %}primary{% else %}danger{% endif %}">
+                                    {% if proposal.action == 'add' %}➕ {% trans 'Add' %}{% elif proposal.action == 'update' %}✏️ {% trans 'Update' %}{% else %}🗑️ {% trans 'Delete' %}{% endif %}
+                                </span>
+                                <span class="badge bg-secondary">{{ proposal.get_entity_type_display }}</span>
+                                {% if proposal.person %}
+                                    <span class="text-muted">{{ proposal.person.first_name }} {{ proposal.person.last_name }}</span>
+                                {% endif %}
+                            </div>
+                            <span class="badge bg-{% if proposal.status == 'proposed' %}warning{% elif proposal.status == 'acknowledged' %}info{% elif proposal.status == 'completed' %}success{% else %}danger{% endif %}">
+                                {% if proposal.status == 'proposed' %}📋 {% trans 'Proposed' %}
+                                {% elif proposal.status == 'acknowledged' %}👀 {% trans 'Acknowledged' %}
+                                {% elif proposal.status == 'completed' %}✅ {% trans 'Completed' %}
+                                {% elif proposal.status == 'rejected' %}❌ {% trans 'Rejected' %}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="text-muted small mb-3">
+                            <i class="bi bi-hash"></i> #{{ proposal.id }} — {% trans "Created" %} {{ proposal.created_at|date:"d/m/Y H:i" }}
+                        </div>
+                        
+                        {% if proposal.data %}
+                            <div class="mb-3">
+                                <strong>{% trans "Proposed Data" %}:</strong>
+                                <div class="bg-light p-3 rounded mt-2 overflow-auto">
+                                    <pre class="mb-0 text-muted small">{{ proposal.data|safe }}</pre>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if proposal.admin_notes %}
+                            <div class="alert alert-info mb-0">
+                                <strong><i class="bi bi-info-circle"></i> {% trans "Admin Notes" %}:</strong>
+                                <p class="mb-0 mt-2">{{ proposal.admin_notes }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <div class="display-6 mb-3">📭</div>
+                <p class="text-muted mb-4">{% trans "You haven't made any proposals yet." %}</p>
+                <a href="{% url 'home' %}" class="btn btn-primary">
+                    <i class="bi bi-house-door"></i> {% trans "Back to Home" %}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

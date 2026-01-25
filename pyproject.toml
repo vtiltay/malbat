@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "malbat"
+version = "1.0.0"
+description = "A modern, collaborative web platform for genealogy and family tree management with Gramps integration"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Victor Tiltay", email = "vtiltay@gmail.com"}
+]
+keywords = [
+    "genealogy",
+    "family-tree",
+    "gramps",
+    "django",
+    "web-application",
+    "genealogical-software",
+    "family-management"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Django :: 4.2",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Office/Business",
+    "Topic :: Sociology :: Genealogy",
+]
+
+[project.urls]
+Homepage = "https://github.com/vtiltay/malbat"
+Documentation = "https://github.com/vtiltay/malbat#readme"
+Repository = "https://github.com/vtiltay/malbat.git"
+Issues = "https://github.com/vtiltay/malbat/issues"
+
+[tool.setuptools]
+packages = ["familytree", "malbat"]

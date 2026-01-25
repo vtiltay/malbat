@@ -1,0 +1,395 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#5b7a9e">
+    <title>{% block title %}{% trans "Malbat.org - Family Tree" %}{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- Malbat Custom Theme - Bootstrap Override Simple -->
+    <style>
+        /* ========================================
+           COULEURS SUBTILES - OVERRIDE BOOTSTRAP
+           ======================================== */
+        
+        /* Variables Bootstrap override */
+        .btn-primary {
+            --bs-btn-bg: #5b7a9e;
+            --bs-btn-border-color: #5b7a9e;
+            --bs-btn-hover-bg: #4a6485;
+            --bs-btn-hover-border-color: #4a6485;
+            --bs-btn-active-bg: #3d5370;
+            --bs-btn-active-border-color: #3d5370;
+        }
+        
+        .btn-outline-primary {
+            --bs-btn-color: #4a6485;
+            --bs-btn-border-color: #5b7a9e;
+            --bs-btn-hover-bg: #5b7a9e;
+            --bs-btn-hover-border-color: #5b7a9e;
+            --bs-btn-hover-color: #fff;
+            --bs-btn-active-bg: #4a6485;
+            --bs-btn-active-border-color: #4a6485;
+            --bs-btn-active-color: #fff;
+        }
+        
+        .btn-outline-success {
+            --bs-btn-color: #4d7a63;
+            --bs-btn-border-color: #6b9d7f;
+            --bs-btn-hover-bg: #6b9d7f;
+            --bs-btn-hover-border-color: #6b9d7f;
+            --bs-btn-hover-color: #fff;
+            --bs-btn-active-bg: #5a8670;
+            --bs-btn-active-border-color: #5a8670;
+            --bs-btn-active-color: #fff;
+        }
+        
+        .btn-outline-warning {
+            --bs-btn-color: #967747;
+            --bs-btn-border-color: #b8956a;
+            --bs-btn-hover-bg: #b8956a;
+            --bs-btn-hover-border-color: #b8956a;
+            --bs-btn-hover-color: #fff;
+            --bs-btn-active-bg: #a17f54;
+            --bs-btn-active-border-color: #a17f54;
+            --bs-btn-active-color: #fff;
+        }
+        
+        .btn-outline-danger {
+            --bs-btn-color: #965f5f;
+            --bs-btn-border-color: #b87d7d;
+            --bs-btn-hover-bg: #b87d7d;
+            --bs-btn-hover-border-color: #b87d7d;
+            --bs-btn-hover-color: #fff;
+            --bs-btn-active-bg: #a56969;
+            --bs-btn-active-border-color: #a56969;
+            --bs-btn-active-color: #fff;
+        }
+        
+        .btn-outline-secondary {
+            --bs-btn-color: #4a5259;
+            --bs-btn-border-color: #6c7580;
+            --bs-btn-hover-bg: #6c7580;
+            --bs-btn-hover-border-color: #6c7580;
+            --bs-btn-hover-color: #fff;
+            --bs-btn-active-bg: #5a6069;
+            --bs-btn-active-border-color: #5a6069;
+            --bs-btn-active-color: #fff;
+        }
+        
+        /* Badges */
+        .badge.bg-primary { background-color: #5b7a9e !important; }
+        .badge.bg-secondary { background-color: #6c7580 !important; }
+        .badge.bg-success { background-color: #6b9d7f !important; }
+        .badge.bg-danger { background-color: #b87d7d !important; }
+        .badge.bg-warning { background-color: #b8956a !important; }
+        .badge.bg-info { background-color: #7d9bb8 !important; }
+        
+        /* Textes colorés */
+        .text-primary { color: #5b7a9e !important; }
+        .text-success { color: #6b9d7f !important; }
+        .text-danger { color: #b87d7d !important; }
+        .text-warning { color: #967747 !important; }
+        .text-info { color: #7d9bb8 !important; }
+        
+        /* Backgrounds */
+        .bg-primary { background-color: #5b7a9e !important; }
+        .bg-success { background-color: #6b9d7f !important; }
+        .bg-danger { background-color: #b87d7d !important; }
+        .bg-warning { background-color: #b8956a !important; }
+        .bg-info { background-color: #7d9bb8 !important; }
+        
+        /* Navbar icon */
+        .navbar-brand i { color: #5b7a9e; }
+        
+        /* Links */
+        a { color: #5b7a9e; }
+        a:hover { color: #4a6485; }
+        
+        /* ========================================
+           MOBILE-FRIENDLY IMPROVEMENTS
+           ======================================== */
+        
+        /* Boutons plus grands pour mobile */
+        .btn {
+            min-height: 44px;
+            padding: 0.625rem 1.25rem;
+        }
+        
+        .btn-sm {
+            min-height: 38px;
+            padding: 0.5rem 1rem;
+        }
+        
+        .btn-lg {
+            min-height: 52px;
+            padding: 0.875rem 1.75rem;
+        }
+        
+        /* Navigation touch-friendly */
+        .navbar {
+            min-height: 64px;
+        }
+        
+        .nav-link {
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+        }
+        
+        .navbar-toggler {
+            min-width: 44px;
+            min-height: 44px;
+        }
+        
+        /* Formulaires touch-friendly */
+        .form-control,
+        .form-select {
+            min-height: 44px;
+            padding: 0.625rem 0.875rem;
+            font-size: 1rem;
+        }
+        
+        .form-control-lg {
+            min-height: 52px;
+            padding: 0.875rem 1rem;
+            font-size: 1.125rem;
+        }
+        
+        /* Cartes avec liens - zones tactiles plus grandes */
+        .card a {
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+        }
+        
+        /* Cartes de résultats de recherche - hover effect */
+        .hover-card {
+            border: 1px solid #e8eaed !important;
+            border-radius: 8px !important;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(91, 122, 158, 0.12) !important;
+            border-color: #5b7a9e !important;
+        }
+        
+        .hover-card a {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .hover-card .card-footer {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-card:hover .card-footer {
+            background-color: #5b7a9e !important;
+        }
+        
+        .hover-card:hover .card-footer small {
+            color: white !important;
+        }
+        
+        /* Dropdown touch-friendly */
+        .dropdown-item {
+            min-height: 44px;
+            padding: 0.75rem 1.25rem;
+        }
+        
+        /* Pagination touch-friendly */
+        .page-link {
+            min-height: 44px;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.625rem 0.875rem;
+        }
+        
+        /* Ombres plus subtiles */
+        .shadow-sm { box-shadow: 0 .125rem .25rem rgba(0,0,0,.04) !important; }
+        .shadow { box-shadow: 0 .25rem .5rem rgba(0,0,0,.06) !important; }
+        .shadow-lg { box-shadow: 0 .5rem 1rem rgba(0,0,0,.08) !important; }
+        
+        /* Bordures plus discrètes */
+        .card { border-color: #e8eaed; }
+        .border { border-color: #e8eaed !important; }
+        .border-bottom { border-color: #e8eaed !important; }
+        
+        /* Mobile responsive */
+        @media (max-width: 767.98px) {
+            .btn:not(.btn-sm) {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .navbar {
+                min-height: 56px;
+            }
+            
+            /* Stack buttons in action sections */
+            .card .row.g-2 > [class*="col-"] {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+
+    <!-- Block for additional styles -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'landing' %}{% endif %}">
+                <i class="bi bi-diagram-3"></i> Malbat.org
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Basculer la navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'landing' %}{% endif %}">
+                            <i class="bi bi-house-door"></i> {% trans "Home" %}
+                        </a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'my_proposals' %}">
+                                <i class="bi bi-clipboard-check"></i> {% trans "My Proposals" %}
+                            </a>
+                        </li>
+
+                        <li class="nav-item ms-lg-2">
+                            <div class="d-flex gap-2 align-items-center flex-wrap">
+                                <span class="badge bg-primary">
+                                    <i class="bi bi-person-circle"></i> {{ user.username }}
+                                </span>
+                                <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-box-arrow-right"></i> {% trans "Logout" %}
+                                </a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'login' %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-box-arrow-in-right"></i> {% trans "Login" %}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'register' %}" class="btn btn-sm btn-primary">
+                                <i class="bi bi-person-plus"></i> {% trans "Register" %}
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <!-- Language Switcher -->
+                    <li class="nav-item dropdown ms-lg-3">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-globe"></i> 
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% if LANGUAGE_CODE == 'en' %}EN{% else %}FR{% endif %}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                            <li>
+                                <form method="post" action="{% url 'set_language' %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="language" value="en">
+                                    <input type="hidden" name="next" value="{{ request.path }}">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-check-circle{% if LANGUAGE_CODE == 'en' %}-fill{% endif %}"></i> English
+                                    </button>
+                                </form>
+                            </li>
+                            <li>
+                                <form method="post" action="{% url 'set_language' %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="language" value="fr">
+                                    <input type="hidden" name="next" value="{{ request.path }}">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-check-circle{% if LANGUAGE_CODE == 'fr' %}-fill{% endif %}"></i> Français
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-4 py-md-5 flex-grow-1">
+        <div class="container-fluid">
+            <!-- Messages -->
+            {% if messages %}
+                <div role="region" aria-live="polite" aria-atomic="true" class="mb-4">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {% if message.tags == 'success' %}
+                                <i class="bi bi-check-circle"></i>
+                            {% elif message.tags == 'error' %}
+                                <i class="bi bi-exclamation-circle"></i>
+                            {% elif message.tags == 'warning' %}
+                                <i class="bi bi-exclamation-triangle"></i>
+                            {% else %}
+                                <i class="bi bi-info-circle"></i>
+                            {% endif %}
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% trans 'Close' %}"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Page Content -->
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Block for additional scripts -->
+    {% block extra_js %}{% endblock %}
+
+    <script>
+        // Close alerts automatically after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>

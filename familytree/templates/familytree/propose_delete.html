@@ -1,0 +1,69 @@
+{% extends "familytree/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Propose Deletion" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="alert alert-danger border-start border-danger border-3 mb-4" role="alert">
+                <h4 class="alert-heading">
+                    <i class="bi bi-exclamation-triangle"></i> {% trans "Propose Deletion" %}
+                </h4>
+                <p class="mb-0">{% blocktrans with fname=person.first_name lname=person.last_name %}You are about to propose the deletion of <strong>{{ fname }} {{ lname }}</strong>{% endblocktrans %}</p>
+                <p class="mb-0 mt-2 small">{% trans "This action is irreversible. The administrator will review your request and validate it." %}</p>
+            </div>
+
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-4 p-3 bg-light rounded">
+                            <div class="small text-muted text-uppercase fw-bold mb-2">{% trans "Person to Delete" %}</div>
+                            <div class="fw-bold">{{ person.first_name }} {{ person.last_name }}</div>
+                            {% if person.birth_date %}
+                                <div class="small text-muted mt-1">
+                                    <i class="bi bi-calendar"></i> {% blocktrans with birth_date=person.birth_date|date:"SHORT_DATE_FORMAT" %}Born {{ birth_date }}{% endblocktrans %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input 
+                                    type="checkbox" 
+                                    name="confirmation" 
+                                    id="{{ form.confirmation.id_for_label }}" 
+                                    class="form-check-input {% if form.confirmation.errors %}is-invalid{% endif %}"
+                                    required
+                                >
+                                <label class="form-check-label" for="{{ form.confirmation.id_for_label }}">
+                                    {% blocktrans with fname=person.first_name lname=person.last_name %}I confirm the deletion of {{ fname }} {{ lname }}{% endblocktrans %}
+                                </label>
+                            </div>
+                            {% if form.confirmation.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.confirmation.errors %}
+                                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-sm-flex">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> {% trans "Confirm Deletion" %}
+                            </button>
+                            <a href="{% url 'person_detail' gramps_id_numeric=person.gramps_id_numeric %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i> {% trans "Cancel" %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
